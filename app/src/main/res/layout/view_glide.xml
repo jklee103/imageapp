@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:layout_margin="@dimen/image_margin">
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/v_glide_iv_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/view_blank_box"
+        android:background="@android:color/darker_gray"/>
+    <TextView
+        android:id="@+id/v_glide_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="test"/>
+    <TextView
+        android:id="@+id/v_glide_tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="test"/>
+
+</LinearLayout>

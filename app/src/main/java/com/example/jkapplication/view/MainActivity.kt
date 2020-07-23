@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.jkapplication.R
+import com.example.jkapplication.view.adapters.PagerAdapter
 import com.example.jkapplication.view.fragments.*
 import com.google.android.material.tabs.TabLayout
 
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
                 when(position){
                     0 -> selectFragment=
-                        GlideFragment()
+                        GlideFragment.getInstance()
                     1 -> selectFragment=
                         PicassoFragment()
                     2 -> selectFragment=

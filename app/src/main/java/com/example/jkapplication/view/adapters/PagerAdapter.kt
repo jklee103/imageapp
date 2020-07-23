@@ -1,4 +1,4 @@
-package com.example.jkapplication.view
+package com.example.jkapplication.view.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
