@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 
-class GlideRecyclerAdapter(context: Context, list: List<Monster>) :
+class GlideRecyclerAdapter(context: Context, list: ArrayList<Monster>) :
     RecyclerView.Adapter<GlideRecyclerAdapter.Holder>() {
     val context = context
     val list = list
@@ -28,6 +28,20 @@ class GlideRecyclerAdapter(context: Context, list: List<Monster>) :
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.title.text = list[position].title
         holder.date.text = list[position].date
+    }
+
+    fun replaceAll(items: ArrayList<Monster>) {
+        list.apply {
+            clear()
+            addAll(items)
+            notifyDataSetChanged()
+        }
+    }
+    fun addAll(items: ArrayList<Monster>) {
+        list.apply {
+            addAll(items)
+            notifyDataSetChanged()
+        }
     }
 
 
