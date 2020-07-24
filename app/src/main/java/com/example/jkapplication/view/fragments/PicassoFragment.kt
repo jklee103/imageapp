@@ -11,14 +11,11 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.Glide
 import com.example.jkapplication.R
-import com.example.jkapplication.data.network.GlideRetrofit
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
 import com.example.jkapplication.presenter.GlidePresenter
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
-import com.example.jkapplication.view.adapters.PicassoRecyclerAdapter
 
 class PicassoFragment : Fragment() {
     lateinit var recyclerView: RecyclerView

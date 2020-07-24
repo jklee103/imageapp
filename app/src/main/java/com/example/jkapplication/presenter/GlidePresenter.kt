@@ -1,10 +1,8 @@
 package com.example.jkapplication.presenter
 
 import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import com.example.jkapplication.data.ImagesResponse
-import com.example.jkapplication.data.network.GlideRetrofit
+import com.example.jkapplication.data.network.MainRetrofit
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
 import retrofit2.Call
@@ -13,7 +11,7 @@ import retrofit2.Response
 
 class GlidePresenter(adapter:GlideRecyclerAdapter, list:ArrayList<Monster>) : BasePresenter() {
 
-    var retrofit = GlideRetrofit()
+    var retrofit = MainRetrofit()
     var imglist = retrofit.response
     var list=list
     var adapter=adapter
