@@ -5,11 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".view.fragments.GlideFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/f_glide_rv_recyclerView"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/f_glide_srl_refreshView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/f_glide_rv_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>
