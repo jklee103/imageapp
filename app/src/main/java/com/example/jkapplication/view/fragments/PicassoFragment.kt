@@ -1,61 +1,80 @@
 package com.example.jkapplication.view.fragments
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
 import com.example.jkapplication.R
+import com.example.jkapplication.data.network.GlideRetrofit
+import com.example.jkapplication.model.Monster
+import com.example.jkapplication.model.createContactsList
+import com.example.jkapplication.presenter.GlidePresenter
+import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
+import com.example.jkapplication.view.adapters.PicassoRecyclerAdapter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PicassoFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PicassoFragment : Fragment() {
-    //#2
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    lateinit var recyclerView: RecyclerView
+    lateinit var list: ArrayList<Monster>
+    lateinit var adapter: GlideRecyclerAdapter
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    lateinit var ft: FragmentTransaction
+    lateinit var presenter:GlidePresenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_picasso, container, false)
+        var rootView = inflater.inflate(R.layout.fragment_picasso, container, false)
+        recyclerView = rootView.findViewById(R.id.f_picasso_rv_recyclerView)
+        list = createContactsList(5)//demo list
+        recyclerView.setHasFixedSize(true)
+
+        var context: Context = this!!.activity!!
+        adapter = GlideRecyclerAdapter(context, list) //여기 나중에 어댑터 손보면서 바꿔주기
+
+
+        recyclerView.layoutManager = GridLayoutManager(context,2)//recyclerview adapter
+        recyclerView.adapter = adapter
+
+
+        presenter= GlidePresenter(adapter,list)//getlist
+        presenter.connect()
+
+        swipeRefreshLayout = rootView.findViewById<SwipeRefreshLayout>(R.id.f_picasso_srl_refreshView)
+
+        return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        swipeRefreshLayout.setOnRefreshListener{
+            presenter.connect()
+            Log.d("refresh2","replaced")
+            swipeRefreshLayout.isRefreshing = false
+        }
+
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PicassoFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PicassoFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        var INSTANCE: PicassoFragment? = null
+
+        fun getInstance(): PicassoFragment {
+            if (INSTANCE == null)
+                INSTANCE = PicassoFragment()
+            return INSTANCE!!
+        }
+
+        fun newInstance(): PicassoFragment {
+            return PicassoFragment()
+        }
     }
 }

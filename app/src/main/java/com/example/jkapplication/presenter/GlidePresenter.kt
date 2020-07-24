@@ -2,6 +2,7 @@ package com.example.jkapplication.presenter
 
 import android.util.Log
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jkapplication.data.ImagesResponse
 import com.example.jkapplication.data.network.GlideRetrofit
 import com.example.jkapplication.model.Monster
@@ -10,7 +11,31 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class GlidePresenter(val view: Fragment) : BasePresenter() {
+class GlidePresenter(adapter:GlideRecyclerAdapter, list:ArrayList<Monster>) : BasePresenter() {
 
+    var retrofit = GlideRetrofit()
+    var imglist = retrofit.response
+    var list=list
+    var adapter=adapter
+    fun connect(){
+
+        imglist.clone().enqueue(object : Callback<ImagesResponse?> {
+            override fun onFailure(call: Call<ImagesResponse?>, t: Throwable) {
+                Log.e("glide fragment", "fail")
+            }
+
+            override fun onResponse(
+                call: Call<ImagesResponse?>,
+                response: Response<ImagesResponse?>
+            ) {
+                val body = response.body()
+                Log.d("glide fragment", "ok")
+                list = body!!.images
+                Log.d("item check", list[0].date)
+                adapter.replaceAll(list)
+            }
+
+        })
+    }
 
 }
