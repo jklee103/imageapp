@@ -4,12 +4,13 @@ import android.util.Log
 import com.example.jkapplication.data.ImagesResponse
 import com.example.jkapplication.data.network.MainRetrofit
 import com.example.jkapplication.model.Monster
-import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
+import com.example.jkapplication.view.adapters.BaseAdapter
+import com.example.jkapplication.view.adapters.FrescoRecyclerAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class GlidePresenter(adapter:GlideRecyclerAdapter, list:ArrayList<Monster>) : BasePresenter() {
+class GlidePresenter(adapter: BaseAdapter, list:ArrayList<Monster>) : BasePresenter() {
 
     var retrofit = MainRetrofit()
     var imglist = retrofit.response

@@ -62,4 +62,7 @@ dependencies {
     //picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    //fresco
+    implementation 'com.facebook.fresco:fresco:2.3.0'
+
 }

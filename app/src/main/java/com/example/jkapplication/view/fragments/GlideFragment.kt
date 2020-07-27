@@ -16,7 +16,7 @@ import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
 import com.example.jkapplication.presenter.GlidePresenter
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
-
+private const val LOAD_TYPE = "glide"
 class GlideFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
@@ -24,7 +24,6 @@ class GlideFragment : Fragment() {
     lateinit var swipeRefreshLayout:SwipeRefreshLayout
     lateinit var ft:FragmentTransaction
     lateinit var presenter:GlidePresenter
-    val LOAD_TYPE = "glide"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

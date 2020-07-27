@@ -8,6 +8,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.jkapplication.R
 import com.example.jkapplication.view.adapters.PagerAdapter
 import com.example.jkapplication.view.fragments.*
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Fresco.initialize(this)
         setContentView(R.layout.activity_main)
 
         var selectFragment:Fragment =

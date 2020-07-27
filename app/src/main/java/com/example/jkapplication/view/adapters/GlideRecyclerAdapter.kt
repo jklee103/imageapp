@@ -15,10 +15,11 @@ import com.example.jkapplication.view.fragments.GlideFragment
 import com.squareup.picasso.Picasso
 
 class GlideRecyclerAdapter(context: Context, list: ArrayList<Monster>, loadType:String) :
-    RecyclerView.Adapter<GlideRecyclerAdapter.Holder>() {
+    RecyclerView.Adapter<GlideRecyclerAdapter.Holder>(),BaseAdapter {
     val context = context
     val list = list
     var loadType = loadType
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GlideRecyclerAdapter.Holder {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.view_glide, parent, false)
@@ -36,22 +37,25 @@ class GlideRecyclerAdapter(context: Context, list: ArrayList<Monster>, loadType:
         holder.date.text = list[position].date
         //여기서 라이브러리 구분
         when(loadType){
-            "glide" -> glideLoad(holder, position)
-            "picasso" -> picassoLoad(holder,position)
+            "glide" -> glideLoad(holder as Holder ,position)
+            "picasso" -> picassoLoad(holder = holder as Holder, position = position)
         }
     }
 
-
-    fun glideLoad(holder: Holder,position: Int){  //글라이드 이미지 로드
+    override fun glideLoad(holder: Holder, position: Int) {
         Glide.with(holder.image.context).load(list[position].img_url).override(500,500).centerInside().into(holder.image)
 
     }
-    fun picassoLoad(holder: Holder,position: Int){
 
+    override fun picassoLoad(holder: Holder, position: Int) {
         Picasso.get().load(list[position].img_url).resize(300,300).onlyScaleDown().into(holder.image)
     }
 
-    fun replaceAll(items: ArrayList<Monster>) {
+    override fun frescoLoad(holder: FrescoRecyclerAdapter.Holder, position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun replaceAll(items: ArrayList<Monster>) {
         list.apply {
             clear()
             addAll(items)
@@ -64,8 +68,6 @@ class GlideRecyclerAdapter(context: Context, list: ArrayList<Monster>, loadType:
             notifyDataSetChanged()
         }
     }
-
-
     class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var title: TextView = itemView.findViewById(R.id.v_glide_tv_title)
         var date: TextView = itemView.findViewById(R.id.v_glide_tv_date)
