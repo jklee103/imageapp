@@ -12,12 +12,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/view_blank_box"
-        android:background="@android:color/darker_gray"/>
+        android:background="@android:color/transparent"/>
+
     <TextView
+        android:layout_marginTop="4dp"
         android:id="@+id/v_glide_tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="test"/>
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="test" />
     <TextView
         android:id="@+id/v_glide_tv_date"
         android:layout_width="wrap_content"

@@ -25,7 +25,7 @@ class PicassoRecyclerAdapter(context: Context, list:ArrayList<Monster>): Recycle
     override fun onBindViewHolder(holder: GlideRecyclerAdapter.Holder, position: Int) {
         holder.title.text = list[position].title
         holder.date.text = list[position].date
-        Glide.with(holder.image.context).load(list[position].img_url).override(500,500).centerInside().into(holder.image)
+        Glide.with(holder.image.context).load(list[position].img_url).override(300,300).centerInside().into(holder.image)
 
     }
 

@@ -24,6 +24,7 @@ class PicassoFragment : Fragment() {
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     lateinit var ft: FragmentTransaction
     lateinit var presenter:GlidePresenter
+    val LOAD_TYPE = "picasso"
 
 
     override fun onCreateView(
@@ -36,7 +37,7 @@ class PicassoFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         var context: Context = this!!.activity!!
-        adapter = GlideRecyclerAdapter(context, list) //여기 나중에 어댑터 손보면서 바꿔주기
+        adapter = GlideRecyclerAdapter(context, list,LOAD_TYPE) //여기 나중에 어댑터 손보면서 바꿔주기
 
 
         recyclerView.layoutManager = GridLayoutManager(context,2)//recyclerview adapter

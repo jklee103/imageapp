@@ -24,7 +24,7 @@ class GlideFragment : Fragment() {
     lateinit var swipeRefreshLayout:SwipeRefreshLayout
     lateinit var ft:FragmentTransaction
     lateinit var presenter:GlidePresenter
-
+    val LOAD_TYPE = "glide"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +36,7 @@ class GlideFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         var context: Context = this!!.activity!!
-        adapter = GlideRecyclerAdapter(context, list) //context호출 맞나....
+        adapter = GlideRecyclerAdapter(context, list, LOAD_TYPE) //context호출 맞나....
 
 
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
