@@ -18,7 +18,7 @@ import com.example.jkapplication.presenter.GlidePresenter
 import com.example.jkapplication.view.adapters.FrescoRecyclerAdapter
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val LOAD_TYPE = "glide"
+private const val LOAD_TYPE = "fresco"
 class FrescoFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>

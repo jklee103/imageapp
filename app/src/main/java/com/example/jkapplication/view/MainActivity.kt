@@ -42,11 +42,11 @@ class MainActivity : AppCompatActivity() {
                     0 -> selectFragment=
                         GlideFragment.getInstance()
                     1 -> selectFragment=
-                        PicassoFragment()
+                        PicassoFragment.getInstance()
                     2 -> selectFragment=
-                        FrescoFragment()
+                        FrescoFragment.getInstance()
                     3 -> selectFragment=
-                        ButtonFragment()
+                        ButtonFragment.getInstance()
                     4 -> selectFragment=
                         MoreFragment()
                     5 -> selectFragment=
