@@ -7,9 +7,9 @@ import com.example.jkapplication.view.fragments.*
 
 class PagerAdapter(fm: FragmentManager, behavior: Int) : FragmentStatePagerAdapter(fm, behavior) {
     var fm = fm
-    var behavior=behavior
+    var behavior = behavior
     override fun getItem(position: Int): Fragment {
-        when(position){
+        when (position) {
             0 -> return GlideFragment()
             1 -> return PicassoFragment()
             2 -> return FrescoFragment()

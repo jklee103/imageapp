@@ -1,9 +1,7 @@
 package com.example.jkapplication.data.network
 
-import com.example.jkapplication.data.ImagesResponse
 import com.example.jkapplication.data.PostImagesResponse
 import com.example.jkapplication.data.network.provider.makeRetrofit
-import com.example.jkapplication.model.Monster
 import retrofit2.Call
 
 class MainRetrofit {
@@ -16,6 +14,11 @@ class MainRetrofit {
 
     fun getPostArgu(checkMonster: HashMap<String,Boolean>): Call<PostImagesResponse?> {
         var postResponse = service.getPostImages(checkMonster)
+        return postResponse
+    }
+
+    fun getMoreArgu(page: HashMap<String, Int>): Call<PostImagesResponse?>{
+        var postResponse = service.getMoreImages(page)
         return postResponse
     }
 }

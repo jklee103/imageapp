@@ -1,8 +1,8 @@
 package com.example.jkapplication.view.adapters
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,15 +10,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
-import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.view.SimpleDraweeView
-import com.facebook.imagepipeline.common.ResizeOptions
 import com.facebook.imagepipeline.request.ImageRequestBuilder
-import java.net.URL
 import java.util.*
 
 
-class FrescoRecyclerAdapter(context: Context, list: ArrayList<Monster>, loadType: String) :
+open class FrescoRecyclerAdapter(context: Context, list: ArrayList<Monster>, loadType: String) :
     RecyclerView.Adapter<FrescoRecyclerAdapter.Holder>(), BaseAdapter {
     val context = context
     val list = list
@@ -27,6 +24,7 @@ class FrescoRecyclerAdapter(context: Context, list: ArrayList<Monster>, loadType
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.view_fresco, parent, false)
+        Log.e("view check",context.toString())
         var holder = Holder(view)
         holder.image.hierarchy.setPlaceholderImage(R.drawable.view_blank_box)
         return holder
@@ -56,7 +54,8 @@ class FrescoRecyclerAdapter(context: Context, list: ArrayList<Monster>, loadType
                 //.setResizeOptions(ResizeOptions(300,300))
                 .build()
         holder.image.setImageRequest(imageRequest)
-        holder.image.aspectRatio = (list[position].width.toFloat())/(list[position].height.toFloat()) //비율 설정해줘야 높이 fit됨
+        holder.image.aspectRatio =
+            (list[position].width.toFloat()) / (list[position].height.toFloat()) //비율 설정해줘야 높이 fit됨
 
     }
 
@@ -67,12 +66,14 @@ class FrescoRecyclerAdapter(context: Context, list: ArrayList<Monster>, loadType
             notifyDataSetChanged()
         }
     }
+
     fun addAll(items: ArrayList<Monster>) {
         list.apply {
             addAll(items)
             notifyDataSetChanged()
         }
     }
+
     class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var title: TextView = itemView.findViewById(R.id.v_fresco_tv_title)
         var date: TextView = itemView.findViewById(R.id.v_fresco_tv_date)

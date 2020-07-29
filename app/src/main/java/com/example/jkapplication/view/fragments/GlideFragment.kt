@@ -16,14 +16,16 @@ import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
 import com.example.jkapplication.presenter.GlidePresenter
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
+
 private const val LOAD_TYPE = "glide"
+
 class GlideFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
     lateinit var adapter: GlideRecyclerAdapter
-    lateinit var swipeRefreshLayout:SwipeRefreshLayout
-    lateinit var ft:FragmentTransaction
-    lateinit var presenter:GlidePresenter
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    lateinit var ft: FragmentTransaction
+    lateinit var presenter: GlidePresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +43,7 @@ class GlideFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         recyclerView.adapter = adapter
 
-        presenter=GlidePresenter(adapter,list)
+        presenter = GlidePresenter(adapter, list)
 
         presenter.connect()
 
@@ -53,10 +55,10 @@ class GlideFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        swipeRefreshLayout.setOnRefreshListener{
+        swipeRefreshLayout.setOnRefreshListener {
             //새로고침할때 코드
             presenter.connect()
-            Log.d("refresh","replaced")
+            Log.d("refresh", "replaced")
             swipeRefreshLayout.isRefreshing = false
         }
 

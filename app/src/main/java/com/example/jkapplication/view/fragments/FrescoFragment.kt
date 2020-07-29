@@ -3,10 +3,10 @@ package com.example.jkapplication.view.fragments
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -19,6 +19,7 @@ import com.example.jkapplication.view.adapters.FrescoRecyclerAdapter
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val LOAD_TYPE = "fresco"
+
 class FrescoFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
@@ -37,17 +38,19 @@ class FrescoFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         var context: Context = this!!.activity!!
-        adapter = FrescoRecyclerAdapter(context, list,LOAD_TYPE) //여기 나중에 어댑터 손보면서 바꿔주기
+        adapter = FrescoRecyclerAdapter(context, list, LOAD_TYPE) //여기 나중에 어댑터 손보면서 바꿔주기
 
 
-        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
 
 
-        presenter= GlidePresenter(adapter,list)//getlist
+        presenter = GlidePresenter(adapter, list)//getlist
         presenter.connect()
 
-        swipeRefreshLayout = rootView.findViewById<SwipeRefreshLayout>(R.id.f_fresco_srl_refreshView)
+        swipeRefreshLayout =
+            rootView.findViewById<SwipeRefreshLayout>(R.id.f_fresco_srl_refreshView)
 
         // Inflate the layout for this fragment
         return rootView
@@ -55,13 +58,14 @@ class FrescoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        swipeRefreshLayout.setOnRefreshListener{
+        swipeRefreshLayout.setOnRefreshListener {
             presenter.connect()
-            Log.d("refresh3","replaced")
+            Log.d("refresh3", "replaced")
             swipeRefreshLayout.isRefreshing = false
         }
 
     }
+
     companion object {
         var INSTANCE: FrescoFragment? = null
 

@@ -1,8 +1,8 @@
 package com.example.jkapplication.view
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.jkapplication.R
@@ -12,7 +12,7 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
-    lateinit var viewPager:ViewPager2
+    lateinit var viewPager: ViewPager2
     lateinit var pagerAdapter: PagerAdapter
     lateinit var context: Context
     lateinit var tabLayout: TabLayout
@@ -22,13 +22,13 @@ class MainActivity : AppCompatActivity() {
         Fresco.initialize(this)
         setContentView(R.layout.activity_main)
 
-        var selectFragment:Fragment =
+        var selectFragment: Fragment =
             GlideFragment()
 
-        supportFragmentManager.beginTransaction().add(R.id.a_main_fl_frame,selectFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.a_main_fl_frame, selectFragment).commit()
         tabLayout = findViewById(R.id.a_main_tl_tab)
 
-        tabLayout.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
 
@@ -38,25 +38,26 @@ class MainActivity : AppCompatActivity() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 var position = tab?.position
 
-                when(position){
-                    0 -> selectFragment=
+                when (position) {
+                    0 -> selectFragment =
                         GlideFragment.getInstance()
-                    1 -> selectFragment=
+                    1 -> selectFragment =
                         PicassoFragment.getInstance()
-                    2 -> selectFragment=
+                    2 -> selectFragment =
                         FrescoFragment.getInstance()
-                    3 -> selectFragment=
+                    3 -> selectFragment =
                         ButtonFragment.getInstance()
-                    4 -> selectFragment=
+                    4 -> selectFragment =
                         MoreFragment()
-                    5 -> selectFragment=
+                    5 -> selectFragment =
                         ScrollFragment()
-                    else -> selectFragment=
+                    else -> selectFragment =
                         GlideFragment()
 
                 }
 
-                supportFragmentManager.beginTransaction().replace(R.id.a_main_fl_frame,selectFragment).commit()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.a_main_fl_frame, selectFragment).commit()
             }
 
         })

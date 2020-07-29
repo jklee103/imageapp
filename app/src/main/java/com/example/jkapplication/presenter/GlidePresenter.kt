@@ -17,6 +17,7 @@ class GlidePresenter(adapter: BaseAdapter, list:ArrayList<Monster>) : BasePresen
     var retrofit = MainRetrofit()
     var imglist = retrofit.response
 
+    var isLast=false
     var list=list
     var adapter=adapter
     fun connect(){
@@ -59,6 +60,36 @@ class GlidePresenter(adapter: BaseAdapter, list:ArrayList<Monster>) : BasePresen
             }
 
         })
+    }
+    fun moreConnect(checkMonster: HashMap<String, Int>){
+
+        var postImgList=retrofit.getMoreArgu(checkMonster)
+        postImgList.clone().enqueue(object :Callback<PostImagesResponse?>{
+            override fun onFailure(call: Call<PostImagesResponse?>, t: Throwable) {
+                Log.e("more post connect","fail")
+            }
+
+            override fun onResponse(
+                call: Call<PostImagesResponse?>,
+                response: Response<PostImagesResponse?>
+            ) {
+                val body = response.body()
+                Log.d("more post connect", "ok")
+                list = body!!.data.images
+                Log.d("item check", list[0].date)
+                adapter.replaceAll(list)
+                isLast = body!!.data.isLast
+            }
+
+        })
+    }
+
+
+    fun getIsLast(): Boolean {
+        return isLast
+    }
+    fun setIsLast( newlast : Boolean){
+        isLast = newlast
     }
 
 }

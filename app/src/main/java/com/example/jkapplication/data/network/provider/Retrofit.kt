@@ -1,12 +1,12 @@
 package com.example.jkapplication.data.network.provider
 
+import android.content.res.Resources
+import com.example.jkapplication.R
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 val retrofit by lazy { makeRetrofit() }
 
@@ -18,5 +18,5 @@ fun makeRetrofit(): Retrofit = Retrofit.Builder()
     .build()
 
 fun makeHttpClient() = OkHttpClient.Builder()
-    .addInterceptor (makeLoggingInterceptor())
+    .addInterceptor(makeLoggingInterceptor())
     .build()
