@@ -24,7 +24,6 @@ open class FrescoRecyclerAdapter(context: Context, list: ArrayList<Monster>, loa
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.view_fresco, parent, false)
-        Log.e("view check",context.toString())
         var holder = Holder(view)
         holder.image.hierarchy.setPlaceholderImage(R.drawable.view_blank_box)
         return holder
@@ -67,7 +66,7 @@ open class FrescoRecyclerAdapter(context: Context, list: ArrayList<Monster>, loa
         }
     }
 
-    fun addAll(items: ArrayList<Monster>) {
+    override fun addAll(items: ArrayList<Monster>) {
         list.apply {
             addAll(items)
             notifyDataSetChanged()

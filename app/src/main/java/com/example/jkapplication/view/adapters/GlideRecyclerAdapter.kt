@@ -63,7 +63,7 @@ class GlideRecyclerAdapter(context: Context, list: ArrayList<Monster>, loadType:
         }
     }
 
-    fun addAll(items: ArrayList<Monster>) {
+    override fun addAll(items: ArrayList<Monster>) {
         list.apply {
             addAll(items)
             notifyDataSetChanged()

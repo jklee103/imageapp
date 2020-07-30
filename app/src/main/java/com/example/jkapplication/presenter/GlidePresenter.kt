@@ -61,7 +61,7 @@ class GlidePresenter(adapter: BaseAdapter, list:ArrayList<Monster>) : BasePresen
 
         })
     }
-    fun moreConnect(checkMonster: HashMap<String, Int>){
+    fun moreConnect(checkMonster: HashMap<String, Int>, replaceList: Boolean){
 
         var postImgList=retrofit.getMoreArgu(checkMonster)
         postImgList.clone().enqueue(object :Callback<PostImagesResponse?>{
@@ -76,14 +76,13 @@ class GlidePresenter(adapter: BaseAdapter, list:ArrayList<Monster>) : BasePresen
                 val body = response.body()
                 Log.d("more post connect", "ok")
                 list = body!!.data.images
-                Log.d("item check", list[0].date)
-                adapter.replaceAll(list)
+                if(replaceList) adapter.replaceAll(list)
+                else adapter.addAll(list)
                 isLast = body!!.data.isLast
             }
 
         })
     }
-
 
     fun getIsLast(): Boolean {
         return isLast

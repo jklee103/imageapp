@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                     3 -> selectFragment =
                         ButtonFragment.getInstance()
                     4 -> selectFragment =
-                        MoreFragment()
+                        MoreFragment.getInstance()
                     5 -> selectFragment =
                         ScrollFragment()
                     else -> selectFragment =
