@@ -10,13 +10,15 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.view.fragments.MoreFragment
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 
-class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, loadType: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), BaseAdapter {
+class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, loadType: String) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>(), BaseAdapter {
     private val TYPE_ITEM = 1
     private val TYPE_FOOTER = 2
 
@@ -25,15 +27,16 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
     var loadType = loadType
 
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_FOOTER -> {
-                FooterViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_footer, parent, false))
+                FooterViewHolder(
+                    LayoutInflater.from(parent.context).inflate(R.layout.item_footer, parent, false)
+                )
             }
             else -> {
-                var view = LayoutInflater.from(parent.context).inflate(R.layout.view_fresco, parent, false)
+                var view =
+                    LayoutInflater.from(parent.context).inflate(R.layout.view_fresco, parent, false)
                 var holder = Holder(view)
                 holder.image.hierarchy.setPlaceholderImage(R.drawable.view_blank_box)
                 return holder
@@ -47,17 +50,19 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        var params: StaggeredGridLayoutManager.LayoutParams = holder.itemView.getLayoutParams() as StaggeredGridLayoutManager.LayoutParams
+
 
         when (holder) {
             is FooterViewHolder -> {
-                if(MoreFragment.getInstance().checkLast()){
-                    holder.more.visibility=View.INVISIBLE
-                    Toast.makeText(context,"List End" ,  Toast.LENGTH_SHORT).show()
-                }
-                else holder.more.visibility=View.VISIBLE
+                params.isFullSpan= true //  이거하면 얘만 너비꽉차게 보임
+                if (MoreFragment.getInstance().checkLast()) {
+                    holder.more.visibility = View.INVISIBLE
+                    Toast.makeText(context, "List End", Toast.LENGTH_SHORT).show()
+                } else holder.more.visibility = View.VISIBLE
                 holder.more.setOnClickListener {
 
-                    Log.d("btn" , "clicked")
+                    Log.d("btn", "clicked")
                     MoreFragment.getInstance().onLoadMore()
                 }
             }
@@ -79,9 +84,10 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
     }
 
 
-    class FooterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        var more : Button = itemView.findViewById(R.id.i_footer_btn_more)
+    class FooterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var more: Button = itemView.findViewById(R.id.i_footer_btn_more)
     }
+
     class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var title: TextView = itemView.findViewById(R.id.v_fresco_tv_title)
         var date: TextView = itemView.findViewById(R.id.v_fresco_tv_date)

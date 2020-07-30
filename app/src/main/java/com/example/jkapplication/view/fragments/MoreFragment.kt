@@ -49,6 +49,7 @@ class MoreFragment : Fragment() {
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+
         recyclerView.adapter = adapter
 
 
