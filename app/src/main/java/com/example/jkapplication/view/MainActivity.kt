@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                     4 -> selectFragment =
                         MoreFragment.getInstance()
                     5 -> selectFragment =
-                        ScrollFragment()
+                        ScrollFragment.getInstance()
                     else -> selectFragment =
                         GlideFragment()
 

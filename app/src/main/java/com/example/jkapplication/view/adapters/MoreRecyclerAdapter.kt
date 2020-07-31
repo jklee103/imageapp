@@ -55,7 +55,7 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
 
         when (holder) {
             is FooterViewHolder -> {
-                params.isFullSpan= true //  이거하면 얘만 너비꽉차게 보임
+                params.isFullSpan= true //  이거하면 얘만 너비꽉차게 보
                 if (MoreFragment.getInstance().checkLast()) {
                     holder.more.visibility = View.INVISIBLE
                     Toast.makeText(context, "List End", Toast.LENGTH_SHORT).show()

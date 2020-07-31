@@ -1,61 +1,125 @@
 package com.example.jkapplication.view.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.jkapplication.R
+import com.example.jkapplication.model.Monster
+import com.example.jkapplication.model.createContactsList
+import com.example.jkapplication.presenter.GlidePresenter
+import com.example.jkapplication.view.CustomScroll
+import com.example.jkapplication.view.adapters.MoreRecyclerAdapter
+import com.example.jkapplication.view.adapters.ScrollRecyclerAdapter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val LOAD_TYPE = "glide"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ScrollFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ScrollFragment : Fragment() {
-    //6
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class ScrollFragment : Fragment(), CustomScroll.onLoadMore {
+    lateinit var recyclerView: RecyclerView
+    lateinit var list: ArrayList<Monster>
+    lateinit var adapter: ScrollRecyclerAdapter
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    lateinit var presenter: GlidePresenter
+    lateinit var button: Button
+    lateinit var hashmap: HashMap<String, Int>
+    lateinit var myscroll: CustomScroll
+    var count = 1
+    var mainHandler = Handler()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_scroll, container, false)
+        var rootView = inflater.inflate(R.layout.fragment_scroll, container, false)
+
+        recyclerView = rootView.findViewById(R.id.f_scroll_rv_recyclerView)
+        list = createContactsList(5)//demo list
+        recyclerView.setHasFixedSize(true)
+
+        var context: Context = this!!.activity!!
+        adapter = ScrollRecyclerAdapter(context, list, LOAD_TYPE) //여기 나중에 어댑터 손보면서 바꿔주기
+
+
+        recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+
+        recyclerView.adapter = adapter
+
+        myscroll = CustomScroll(this)
+        myscroll.setLoaded()
+        recyclerView.addOnScrollListener(myscroll)
+
+        presenter = GlidePresenter(adapter, list)//getlist
+
+        setHashmap()
+
+        presenter.moreConnect(hashmap, true)
+
+        swipeRefreshLayout =
+            rootView.findViewById<SwipeRefreshLayout>(R.id.f_scroll_srl_refreshView)
+
+        return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        swipeRefreshLayout.setOnRefreshListener { //새로고침시 리스트 받아옴
+            count = 1
+            setHashmap()
+            presenter.setIsLast(false)
+            presenter.moreConnect(hashmap, true)
+            Log.d("refresh6", "replaced")
+            swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
+        }
+    }
+
+    override fun onLoadMore() {
+        recyclerView.smoothScrollToPosition(recyclerView.layoutManager!!.itemCount)
+        Log.e("main", "load count is $count")
+        if (!checkLast())
+            mainHandler.postDelayed({
+                count++;
+                hashmap = HashMap<String, Int>()
+                hashmap.put("page", count)
+                hashmap.put("perpage", 5)
+                presenter.moreConnect(hashmap, false)
+                myscroll.setLoaded()
+            }, 2000)
+    }
+
+    fun checkLast(): Boolean {
+        return presenter.getIsLast()
+    }
+
+    fun setHashmap() {
+        count = 1
+        hashmap = HashMap<String, Int>()
+        hashmap.put("page", 1)
+        hashmap.put("perpage", 5)
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ScrollFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ScrollFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        var INSTANCE: ScrollFragment? = null
+
+        fun getInstance(): ScrollFragment {
+            if (INSTANCE == null)
+                INSTANCE = ScrollFragment()
+            return INSTANCE!!
+        }
+
+        fun newInstance(): ScrollFragment {
+            return ScrollFragment()
+        }
     }
+
 }

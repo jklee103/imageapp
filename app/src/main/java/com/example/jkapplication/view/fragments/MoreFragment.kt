@@ -28,7 +28,6 @@ class MoreFragment : Fragment() {
     lateinit var adapter: MoreRecyclerAdapter
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     lateinit var presenter: GlidePresenter
-    lateinit var button: Button
     lateinit var hashmap: HashMap<String, Int>
 
     var count=1//페이지
