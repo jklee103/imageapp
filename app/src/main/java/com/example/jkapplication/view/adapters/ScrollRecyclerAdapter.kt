@@ -56,6 +56,7 @@ class ScrollRecyclerAdapter(
             is Holder -> {
                 holder.title.text = list[position].title
                 holder.date.text = list[position].date
+                moreLoad(holder, position)
             }
             is ProgressHolder -> {
                 params.isFullSpan= true

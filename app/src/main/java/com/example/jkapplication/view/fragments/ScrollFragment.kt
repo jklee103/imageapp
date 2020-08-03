@@ -78,6 +78,7 @@ class ScrollFragment : Fragment(), CustomScroll.onLoadMore {
             presenter.setIsLast(false)
             presenter.moreConnect(hashmap, true)
             Log.d("refresh6", "replaced")
+            myscroll.setLoaded()
             swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
         }
     }
