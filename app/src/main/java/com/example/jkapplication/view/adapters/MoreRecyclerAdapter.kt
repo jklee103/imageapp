@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
+import com.example.jkapplication.model.getProgressItem
 import com.example.jkapplication.view.fragments.MoreFragment
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.request.ImageRequestBuilder
@@ -21,19 +22,27 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), BaseAdapter {
     private val TYPE_ITEM = 1
     private val TYPE_FOOTER = 2
+    private val TYPE_LOADING = 0
 
     val context = context
     val list = list
     var loadType = loadType
+    lateinit var viewGroup: ViewGroup
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        viewGroup = parent
         return when (viewType) {
             TYPE_FOOTER -> {
                 FooterViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.item_footer, parent, false)
                 )
             }
+//            TYPE_LOADING -> {
+//                val view = LayoutInflater.from(parent.context)
+//                    .inflate(R.layout.item_progress, parent, false)
+//                return ProgressHolder(view)
+//            }
             else -> {
                 var view =
                     LayoutInflater.from(parent.context).inflate(R.layout.view_fresco, parent, false)
@@ -50,12 +59,13 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        var params: StaggeredGridLayoutManager.LayoutParams = holder.itemView.getLayoutParams() as StaggeredGridLayoutManager.LayoutParams
+        var params: StaggeredGridLayoutManager.LayoutParams =
+            holder.itemView.getLayoutParams() as StaggeredGridLayoutManager.LayoutParams
 
 
         when (holder) {
             is FooterViewHolder -> {
-                params.isFullSpan= true //  이거하면 얘만 너비꽉차게 보
+                params.isFullSpan = true //  이거하면 얘만 너비꽉차게 보
                 if (MoreFragment.getInstance().checkLast()) {
                     holder.more.visibility = View.INVISIBLE
                     Toast.makeText(context, "List End", Toast.LENGTH_SHORT).show()
@@ -65,6 +75,9 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
                     Log.d("btn", "clicked")
                     MoreFragment.getInstance().onLoadMore()
                 }
+            }
+            is ScrollRecyclerAdapter.ProgressHolder -> {
+                params.isFullSpan = true
             }
             is Holder -> {
                 holder.title.text = list[position].title
@@ -83,6 +96,9 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
 
     }
 
+    class ProgressHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    }
 
     class FooterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var more: Button = itemView.findViewById(R.id.i_footer_btn_more)
@@ -130,5 +146,18 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
             addAll(items)
             notifyDataSetChanged()
         }
+    }
+
+    fun addprogress(position: Int = list.size) {
+
+        if (position == 0)//topscroll
+            list.add(position, getProgressItem())
+        else//bottom
+            list.add(getProgressItem())
+    }
+
+    fun removeprogress(position: Int = list.size - 1) {
+        list.removeAt(position)
+        notifyItemRemoved(position)
     }
 }

@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
+import com.example.jkapplication.model.getProgressItem
 import com.example.jkapplication.view.fragments.ScrollFragment
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.request.ImageRequestBuilder
@@ -18,30 +20,48 @@ class ScrollRecyclerAdapter(
     list: java.util.ArrayList<Monster>,
     loadType: String
 ) :
-    RecyclerView.Adapter<ScrollRecyclerAdapter.Holder>(), BaseAdapter {
-    private val TYPE_ITEM = 1
-    private val TYPE_FOOTER = 2
+    RecyclerView.Adapter<RecyclerView.ViewHolder>(), BaseAdapter {
+    var TYPE_ITEM = 0
+    var TYPE_LOADING = 1
 
     val context = context
     val list = list
     var loadType = loadType
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-
-        var view =
-            LayoutInflater.from(parent.context).inflate(R.layout.view_fresco, parent, false)
-        var holder = Holder(view)
-        holder.image.hierarchy.setPlaceholderImage(R.drawable.view_blank_box)
-        return holder
-
+    override fun getItemViewType(position: Int): Int {
+        return if (list[position].img_url != "progress")
+            TYPE_ITEM
+        else
+            TYPE_LOADING
     }
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        if (viewType == TYPE_ITEM) {
+            var view =
+                LayoutInflater.from(parent.context).inflate(R.layout.view_fresco, parent, false)
+            var holder = Holder(view)
+            holder.image.hierarchy.setPlaceholderImage(R.drawable.view_blank_box)
+            return holder
+        } else{
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_progress, parent,false)
+            return ProgressHolder(view)
+        }
+    }
 
-        holder.title.text = list[position].title
-        holder.date.text = list[position].date
-        moreLoad(holder, position)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        var params: StaggeredGridLayoutManager.LayoutParams = holder.itemView.getLayoutParams() as StaggeredGridLayoutManager.LayoutParams
+
+        when(holder){
+            is Holder -> {
+                holder.title.text = list[position].title
+                holder.date.text = list[position].date
+                moreLoad(holder, position)
+            }
+            is ProgressHolder -> {
+                params.isFullSpan= true
+            }
+        }
 
     }
 
@@ -49,21 +69,12 @@ class ScrollRecyclerAdapter(
         return list.size
     }
 
-
-//    override fun getItemViewType(position: Int)
-//            : Int {
-//        return when (position) {
-//            itemCount - 1 -> TYPE_FOOTER
-//            else -> TYPE_ITEM
-//        }
-//
-//    }
-
-
     class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var title: TextView = itemView.findViewById(R.id.v_fresco_tv_title)
         var date: TextView = itemView.findViewById(R.id.v_fresco_tv_date)
         var image: SimpleDraweeView = itemView.findViewById(R.id.v_fresco_iv_image)
+    }
+    class ProgressHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }
 
@@ -104,5 +115,15 @@ class ScrollRecyclerAdapter(
         }
     }
 
+    fun addprogress(position: Int = list.size) {
+        if (position == 0)//topscroll
+            list.add(position, getProgressItem())
+        else//bottom
+            list.add(getProgressItem())
+    }
 
+    fun removeprogress(position: Int = list.size - 1) {
+        list.removeAt(position)
+        notifyItemRemoved(position)
+    }
 }

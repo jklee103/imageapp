@@ -2,6 +2,7 @@ package com.example.jkapplication.view.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -30,7 +31,8 @@ class MoreFragment : Fragment() {
     lateinit var presenter: GlidePresenter
     lateinit var hashmap: HashMap<String, Int>
 
-    var count=1//페이지
+    var count = 1//페이지
+    var mainHandler = Handler()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,10 +66,11 @@ class MoreFragment : Fragment() {
 
         return rootView
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         swipeRefreshLayout.setOnRefreshListener { //새로고침시 리스트 받아옴
-            count=1
+            count = 1
             setHashmap()
             presenter.setIsLast(false)
             presenter.moreConnect(hashmap, true)
@@ -76,23 +79,27 @@ class MoreFragment : Fragment() {
         }
     }
 
-    fun setHashmap(){
-        count=1
+    fun setHashmap() {
+        count = 1
         hashmap = HashMap<String, Int>()
         hashmap.put("page", 1)
         hashmap.put("perpage", 5)
     }
 
-    fun onLoadMore(){
-
-        count++;
-        hashmap = HashMap<String, Int>()
-        hashmap.put("page", count)
-        hashmap.put("perpage", 5)
-        presenter.moreConnect(hashmap, false)
+    fun onLoadMore() {
+        //adapter.addprogress()
+        mainHandler.postDelayed({
+            //adapter.removeprogress()
+            count++;
+            hashmap = HashMap<String, Int>()
+            hashmap.put("page", count)
+            hashmap.put("perpage", 5)
+            presenter.moreConnect(hashmap, false)
+        }, 2000)
 
     }
-    fun checkLast():Boolean{
+
+    fun checkLast(): Boolean {
         return presenter.getIsLast()
     }
 

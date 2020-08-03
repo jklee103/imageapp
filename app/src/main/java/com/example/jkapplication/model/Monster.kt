@@ -17,7 +17,7 @@ fun createContactsList(numContacts: Int): ArrayList<Monster> {
             Monster(
                 title = "DemoTitle",
                 date = "2020-07-23",
-                img_url = "http://mblogthumb3.phinf.naver.net/20151231_162/jhsohn94_1451566021941xH4x5_JPEG/b0034380_11264094.jpg?type=w2",
+                img_url = "demo",
                 width = 200,
                 height = 200
             )
@@ -26,5 +26,13 @@ fun createContactsList(numContacts: Int): ArrayList<Monster> {
 
     return contacts;
 }
-
+fun getProgressItem(): Monster {
+    return Monster(
+        "progress",
+        "progress",
+        "progress",
+        1,
+        1
+    )
+}
 

@@ -4,11 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -17,7 +17,6 @@ import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
 import com.example.jkapplication.presenter.GlidePresenter
 import com.example.jkapplication.view.CustomScroll
-import com.example.jkapplication.view.adapters.MoreRecyclerAdapter
 import com.example.jkapplication.view.adapters.ScrollRecyclerAdapter
 
 private const val LOAD_TYPE = "glide"
@@ -73,7 +72,7 @@ class ScrollFragment : Fragment(), CustomScroll.onLoadMore {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        swipeRefreshLayout.setOnRefreshListener { //새로고침시 리스트 받아옴
+        swipeRefreshLayout.setOnRefreshListener { //onloadmore 끝까지 호출후에는 새로고침을해도 호출이안됨...
             count = 1
             setHashmap()
             presenter.setIsLast(false)
@@ -85,9 +84,14 @@ class ScrollFragment : Fragment(), CustomScroll.onLoadMore {
 
     override fun onLoadMore() {
         recyclerView.smoothScrollToPosition(recyclerView.layoutManager!!.itemCount)
-        Log.e("main", "load count is $count")
-        if (!checkLast())
+        Log.e("main", "load count is $count, ${checkLast()}")
+
+        if (!checkLast())// 여기에 프로그레스 추
+        {
+            adapter.addprogress()
+            adapter.notifyItemInserted(recyclerView.layoutManager!!.itemCount)
             mainHandler.postDelayed({
+                adapter.removeprogress()
                 count++;
                 hashmap = HashMap<String, Int>()
                 hashmap.put("page", count)
@@ -95,6 +99,7 @@ class ScrollFragment : Fragment(), CustomScroll.onLoadMore {
                 presenter.moreConnect(hashmap, false)
                 myscroll.setLoaded()
             }, 2000)
+        }
     }
 
     fun checkLast(): Boolean {
