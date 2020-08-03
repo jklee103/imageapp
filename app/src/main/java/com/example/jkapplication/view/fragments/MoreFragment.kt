@@ -32,7 +32,7 @@ class MoreFragment : Fragment() {
     lateinit var hashmap: HashMap<String, Int>
 
     var count = 1//페이지
-    var mainHandler = Handler()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,16 +87,11 @@ class MoreFragment : Fragment() {
     }
 
     fun onLoadMore() {
-        //adapter.addprogress()
-        mainHandler.postDelayed({
-            //adapter.removeprogress()
-            count++;
-            hashmap = HashMap<String, Int>()
-            hashmap.put("page", count)
-            hashmap.put("perpage", 5)
-            presenter.moreConnect(hashmap, false)
-        }, 2000)
-
+        count++;
+        hashmap = HashMap<String, Int>()
+        hashmap.put("page", count)
+        hashmap.put("perpage", 5)
+        presenter.moreConnect(hashmap, false)
     }
 
     fun checkLast(): Boolean {

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/i_progress_pb_progress"
         android:layout_margin="16dp"
         android:layout_gravity="center"
         android:layout_height="wrap_content"

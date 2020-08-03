@@ -2,11 +2,13 @@ package com.example.jkapplication.view.adapters
 
 import android.content.Context
 import android.net.Uri
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -28,7 +30,7 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
     val list = list
     var loadType = loadType
     lateinit var viewGroup: ViewGroup
-
+    var mainHandler = Handler()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         viewGroup = parent
@@ -38,11 +40,6 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
                     LayoutInflater.from(parent.context).inflate(R.layout.item_footer, parent, false)
                 )
             }
-//            TYPE_LOADING -> {
-//                val view = LayoutInflater.from(parent.context)
-//                    .inflate(R.layout.item_progress, parent, false)
-//                return ProgressHolder(view)
-//            }
             else -> {
                 var view =
                     LayoutInflater.from(parent.context).inflate(R.layout.view_fresco, parent, false)
@@ -66,18 +63,22 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
         when (holder) {
             is FooterViewHolder -> {
                 params.isFullSpan = true //  이거하면 얘만 너비꽉차게 보
+
                 if (MoreFragment.getInstance().checkLast()) {
                     holder.more.visibility = View.INVISIBLE
                     Toast.makeText(context, "List End", Toast.LENGTH_SHORT).show()
                 } else holder.more.visibility = View.VISIBLE
                 holder.more.setOnClickListener {
-
                     Log.d("btn", "clicked")
-                    MoreFragment.getInstance().onLoadMore()
+                    holder.more.visibility = View.INVISIBLE
+                    holder.progress.visibility = View.VISIBLE
+                    mainHandler.postDelayed({
+                        holder.progress.visibility = View.GONE
+                        MoreFragment.getInstance().onLoadMore()
+
+                    },2000)
+
                 }
-            }
-            is ScrollRecyclerAdapter.ProgressHolder -> {
-                params.isFullSpan = true
             }
             is Holder -> {
                 holder.title.text = list[position].title
@@ -96,12 +97,10 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
 
     }
 
-    class ProgressHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    }
-
     class FooterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var more: Button = itemView.findViewById(R.id.i_footer_btn_more)
+        var progress: ProgressBar = itemView.findViewById(R.id.i_footer_pb_progress)
+
     }
 
     class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -148,16 +147,4 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
         }
     }
 
-    fun addprogress(position: Int = list.size) {
-
-        if (position == 0)//topscroll
-            list.add(position, getProgressItem())
-        else//bottom
-            list.add(getProgressItem())
-    }
-
-    fun removeprogress(position: Int = list.size - 1) {
-        list.removeAt(position)
-        notifyItemRemoved(position)
-    }
 }
