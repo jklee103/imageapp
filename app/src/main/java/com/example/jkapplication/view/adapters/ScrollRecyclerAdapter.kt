@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.getProgressItem
-import com.example.jkapplication.view.fragments.ScrollFragment
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 
@@ -43,23 +42,25 @@ class ScrollRecyclerAdapter(
             var holder = Holder(view)
             holder.image.hierarchy.setPlaceholderImage(R.drawable.view_blank_box)
             return holder
-        } else{
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_progress, parent,false)
+        } else {
+            val view =
+                LayoutInflater.from(parent.context).inflate(R.layout.item_progress, parent, false)
             return ProgressHolder(view)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        var params: StaggeredGridLayoutManager.LayoutParams = holder.itemView.getLayoutParams() as StaggeredGridLayoutManager.LayoutParams
+        var params: StaggeredGridLayoutManager.LayoutParams =
+            holder.itemView.getLayoutParams() as StaggeredGridLayoutManager.LayoutParams
 
-        when(holder){
+        when (holder) {
             is Holder -> {
                 holder.title.text = list[position].title
                 holder.date.text = list[position].date
                 moreLoad(holder, position)
             }
             is ProgressHolder -> {
-                params.isFullSpan= true
+                params.isFullSpan = true
             }
         }
 
@@ -74,6 +75,7 @@ class ScrollRecyclerAdapter(
         var date: TextView = itemView.findViewById(R.id.v_fresco_tv_date)
         var image: SimpleDraweeView = itemView.findViewById(R.id.v_fresco_iv_image)
     }
+
     class ProgressHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }

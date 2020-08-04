@@ -28,6 +28,10 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().add(R.id.a_main_fl_frame, selectFragment).commit()
         tabLayout = findViewById(R.id.a_main_tl_tab)
 
+//        TabLayoutMediator(tabLayout, viewPager){ tab, position ->
+//            tab.text = "#${(position + 1)}"
+//        }.attach()
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
@@ -62,5 +66,6 @@ class MainActivity : AppCompatActivity() {
 
         })
     }
+
 }
 

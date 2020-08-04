@@ -43,7 +43,6 @@
             android:layout_height="wrap_content"
             android:text="#6" />
     </com.google.android.material.tabs.TabLayout>
-
     <FrameLayout
         android:id="@+id/a_main_fl_frame"
         android:layout_width="match_parent"

@@ -5,7 +5,7 @@ data class Monster(
     var date: String,
     var img_url: String,
     var width: Int,
-    var height:Int
+    var height: Int
 )
 
 // 입력받은 숫자의 리스트생성
@@ -26,6 +26,7 @@ fun createContactsList(numContacts: Int): ArrayList<Monster> {
 
     return contacts;
 }
+
 fun getProgressItem(): Monster {
     return Monster(
         "progress",

@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
-import com.example.jkapplication.model.getProgressItem
 import com.example.jkapplication.view.fragments.MoreFragment
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.request.ImageRequestBuilder
@@ -76,7 +75,7 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
                         holder.progress.visibility = View.GONE
                         MoreFragment.getInstance().onLoadMore()
 
-                    },2000)
+                    }, 2000)
 
                 }
             }

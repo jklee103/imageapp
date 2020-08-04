@@ -6,21 +6,19 @@ import com.example.jkapplication.data.PostImagesResponse
 import com.example.jkapplication.data.network.MainRetrofit
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.view.adapters.BaseAdapter
-import com.example.jkapplication.view.adapters.FrescoRecyclerAdapter
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class GlidePresenter(adapter: BaseAdapter, list:ArrayList<Monster>) : BasePresenter() {
+class GlidePresenter(adapter: BaseAdapter, list: ArrayList<Monster>) : BasePresenter() {
 
     var retrofit = MainRetrofit()
     var imglist = retrofit.response
 
-    var isLast=false
-    var list=list
-    var adapter=adapter
-    fun connect(){
+    var isLast = false
+    var list = list
+    var adapter = adapter
+    fun connect() {
 
         imglist.clone().enqueue(object : Callback<ImagesResponse?> {
             override fun onFailure(call: Call<ImagesResponse?>, t: Throwable) {
@@ -40,12 +38,13 @@ class GlidePresenter(adapter: BaseAdapter, list:ArrayList<Monster>) : BasePresen
 
         })
     }
-    fun postConnect(checkMonster: HashMap<String, Boolean>){
 
-        var postImgList=retrofit.getPostArgu(checkMonster)
-        postImgList.clone().enqueue(object :Callback<PostImagesResponse?>{
+    fun postConnect(checkMonster: HashMap<String, Boolean>) {
+
+        var postImgList = retrofit.getPostArgu(checkMonster)
+        postImgList.clone().enqueue(object : Callback<PostImagesResponse?> {
             override fun onFailure(call: Call<PostImagesResponse?>, t: Throwable) {
-                Log.e("post connect","fail")
+                Log.e("post connect", "fail")
             }
 
             override fun onResponse(
@@ -61,12 +60,13 @@ class GlidePresenter(adapter: BaseAdapter, list:ArrayList<Monster>) : BasePresen
 
         })
     }
-    fun moreConnect(checkMonster: HashMap<String, Int>, replaceList: Boolean){
 
-        var postImgList=retrofit.getMoreArgu(checkMonster)
-        postImgList.clone().enqueue(object :Callback<PostImagesResponse?>{
+    fun moreConnect(checkMonster: HashMap<String, Int>, replaceList: Boolean) {
+
+        var postImgList = retrofit.getMoreArgu(checkMonster)
+        postImgList.clone().enqueue(object : Callback<PostImagesResponse?> {
             override fun onFailure(call: Call<PostImagesResponse?>, t: Throwable) {
-                Log.e("more post connect","fail")
+                Log.e("more post connect", "fail")
             }
 
             override fun onResponse(
@@ -76,7 +76,7 @@ class GlidePresenter(adapter: BaseAdapter, list:ArrayList<Monster>) : BasePresen
                 val body = response.body()
                 Log.d("more post connect", "ok")
                 list = body!!.data.images
-                if(replaceList) adapter.replaceAll(list)
+                if (replaceList) adapter.replaceAll(list)
                 else adapter.addAll(list)
                 isLast = body!!.data.isLast
             }
@@ -87,7 +87,8 @@ class GlidePresenter(adapter: BaseAdapter, list:ArrayList<Monster>) : BasePresen
     fun getIsLast(): Boolean {
         return isLast
     }
-    fun setIsLast( newlast : Boolean){
+
+    fun setIsLast(newlast: Boolean) {
         isLast = newlast
     }
 
