@@ -12,12 +12,12 @@ class MainRetrofit {
     var response = service.getImages()
 
 
-    fun getPostArgu(checkMonster: HashMap<String,Boolean>): Call<PostImagesResponse?> {
+    fun getPostArgu(checkMonster: HashMap<String, Boolean>): Call<PostImagesResponse?> {
         var postResponse = service.getPostImages(checkMonster)
         return postResponse
     }
 
-    fun getMoreArgu(page: HashMap<String, Int>): Call<PostImagesResponse?>{
+    fun getMoreArgu(page: HashMap<String, Int>): Call<PostImagesResponse?> {
         var postResponse = service.getMoreImages(page)
         return postResponse
     }

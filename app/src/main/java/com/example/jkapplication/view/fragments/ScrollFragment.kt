@@ -7,8 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -23,14 +21,14 @@ import com.example.jkapplication.view.adapters.ScrollRecyclerAdapter
 
 private const val LOAD_TYPE = "glide"
 
-class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore,MainView {
+class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
     lateinit var adapter: ScrollRecyclerAdapter
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     lateinit var hashmap: HashMap<String, Int>
     lateinit var myscroll: CustomScroll
-    var replace:Boolean = true
+    var replace: Boolean = true
     var count = 1
     var mainHandler = Handler()
     override val presenter by lazy {
@@ -125,10 +123,10 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore,MainView {
     }
 
     override fun show(items: ArrayList<Monster>) {
-        if(replace) {
+        if (replace) {
             adapter = ScrollRecyclerAdapter(items, LOAD_TYPE)
             recyclerView.adapter = adapter
-        }else adapter.addAll(items)
+        } else adapter.addAll(items)
     }
 
     override fun showError(error: Throwable) {

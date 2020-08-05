@@ -2,6 +2,7 @@ package com.example.jkapplication.data.network
 
 import com.example.jkapplication.data.ImagesResponse
 import com.example.jkapplication.data.PostImagesResponse
+import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,5 +24,8 @@ interface MonsterApi {
     fun getMoreImages(
         @Body body:HashMap<String,Int>
     ):Call<PostImagesResponse?>
+
+    @GET("images")
+    fun getImages2(): Single<ImagesResponse?>
 
 }

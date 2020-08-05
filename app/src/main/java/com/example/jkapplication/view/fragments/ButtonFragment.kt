@@ -7,16 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
-import com.example.jkapplication.presenter.BasePresenter
-import com.example.jkapplication.presenter.GlidePresenter
 import com.example.jkapplication.presenter.PostPresenter
 import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.MainView
@@ -24,7 +20,7 @@ import com.example.jkapplication.view.adapters.FrescoRecyclerAdapter
 
 private const val LOAD_TYPE = "glide"
 
-class ButtonFragment : BaseFragment(),MainView {
+class ButtonFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
     lateinit var adapter: FrescoRecyclerAdapter

@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +18,7 @@ import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
 
-class PicassoFragment : BaseFragment(),MainView {
+class PicassoFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
     lateinit var adapter: GlideRecyclerAdapter
@@ -42,20 +41,21 @@ class PicassoFragment : BaseFragment(),MainView {
 
         var context: Context = this!!.activity!!
 
-        recyclerView.layoutManager = GridLayoutManager(context,2)//recyclerview adapter
+        recyclerView.layoutManager = GridLayoutManager(context, 2)//recyclerview adapter
 
         presenter.connect()
 
-        swipeRefreshLayout = rootView.findViewById<SwipeRefreshLayout>(R.id.f_picasso_srl_refreshView)
+        swipeRefreshLayout =
+            rootView.findViewById<SwipeRefreshLayout>(R.id.f_picasso_srl_refreshView)
 
         return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        swipeRefreshLayout.setOnRefreshListener{
+        swipeRefreshLayout.setOnRefreshListener {
             presenter.connect()
-            Log.d("refresh2","replaced")
+            Log.d("refresh2", "replaced")
             swipeRefreshLayout.isRefreshing = false
         }
 
@@ -78,7 +78,7 @@ class PicassoFragment : BaseFragment(),MainView {
     }
 
     override fun showError(error: Throwable) {
-        Log.e("tab2","Error: ${error.message}")
+        Log.e("tab2", "Error: ${error.message}")
         error.printStackTrace()
     }
 }

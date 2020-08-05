@@ -6,14 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
-import com.example.jkapplication.presenter.GlidePresenter
 import com.example.jkapplication.presenter.MorePresenter
 import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.MainView
@@ -21,7 +19,7 @@ import com.example.jkapplication.view.adapters.MoreRecyclerAdapter
 
 private const val LOAD_TYPE = "glide"
 
-class MoreFragment : BaseFragment(),MainView {
+class MoreFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
     lateinit var adapter: MoreRecyclerAdapter
@@ -30,7 +28,7 @@ class MoreFragment : BaseFragment(),MainView {
     override val presenter by lazy {
         MorePresenter(this)
     }
-    var replace:Boolean = true
+    var replace: Boolean = true
     var count = 1//페이지
 
 
@@ -105,10 +103,10 @@ class MoreFragment : BaseFragment(),MainView {
     }
 
     override fun show(items: ArrayList<Monster>) {
-        if(replace) {
+        if (replace) {
             adapter = MoreRecyclerAdapter(items, LOAD_TYPE)
             recyclerView.adapter = adapter
-        }else adapter.addAll(items)
+        } else adapter.addAll(items)
 
     }
 

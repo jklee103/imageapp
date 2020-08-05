@@ -6,13 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.jkapplication.R
-import com.example.jkapplication.data.network.MainRetrofit
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
 import com.example.jkapplication.presenter.GlidePresenter
@@ -80,7 +77,7 @@ class GlideFragment : BaseFragment(), MainView {
     }
 
     override fun showError(error: Throwable) {
-        Log.e("tab1","Error: ${error.message}")
+        Log.e("tab1", "Error: ${error.message}")
         error.printStackTrace()
     }
 

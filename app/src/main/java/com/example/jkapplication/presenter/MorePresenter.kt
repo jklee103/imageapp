@@ -2,14 +2,12 @@ package com.example.jkapplication.presenter
 
 import android.util.Log
 import com.example.jkapplication.data.PostImagesResponse
-import com.example.jkapplication.model.Monster
 import com.example.jkapplication.view.MainView
-import com.example.jkapplication.view.adapters.BaseAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MorePresenter (val view: MainView) : BasePresenter(){
+class MorePresenter(val view: MainView) : BasePresenter() {
     var isLast = false
 
     fun moreConnect(checkMonster: HashMap<String, Int>, replaceList: Boolean) {
@@ -32,6 +30,7 @@ class MorePresenter (val view: MainView) : BasePresenter(){
 
         })
     }
+
     fun getIsLast(): Boolean {
         return isLast
     }

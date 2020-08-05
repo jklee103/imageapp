@@ -1,6 +1,5 @@
 package com.example.jkapplication.view.adapters
 
-import android.content.Context
 import android.net.Uri
 import android.os.Handler
 import android.util.Log
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.jkapplication.R
