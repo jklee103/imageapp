@@ -30,7 +30,7 @@ class MoreFragment : BaseFragment(),MainView {
     override val presenter by lazy {
         MorePresenter(this)
     }
-
+    var replace:Boolean = true
     var count = 1//페이지
 
 
@@ -65,6 +65,7 @@ class MoreFragment : BaseFragment(),MainView {
         swipeRefreshLayout.setOnRefreshListener { //새로고침시 리스트 받아옴
             count = 1
             setHashmap()
+            replace = true
             presenter.setIsLast(false)
             presenter.moreConnect(hashmap, true)
             Log.d("refresh5", "replaced")
@@ -80,6 +81,7 @@ class MoreFragment : BaseFragment(),MainView {
     }
 
     fun onLoadMore() {
+        replace = false
         count++;
         hashmap = HashMap<String, Int>()
         hashmap.put("page", count)
@@ -103,8 +105,10 @@ class MoreFragment : BaseFragment(),MainView {
     }
 
     override fun show(items: ArrayList<Monster>) {
-        val adapter = MoreRecyclerAdapter(items, LOAD_TYPE)
-        recyclerView.adapter = adapter
+        if(replace) {
+            adapter = MoreRecyclerAdapter(items, LOAD_TYPE)
+            recyclerView.adapter = adapter
+        }else adapter.addAll(items)
 
     }
 

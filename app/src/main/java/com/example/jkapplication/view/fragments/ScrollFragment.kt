@@ -30,6 +30,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore,MainView {
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     lateinit var hashmap: HashMap<String, Int>
     lateinit var myscroll: CustomScroll
+    var replace:Boolean = true
     var count = 1
     var mainHandler = Handler()
     override val presenter by lazy {
@@ -72,6 +73,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore,MainView {
         swipeRefreshLayout.setOnRefreshListener { //onloadmore 끝까지 호출후에는 새로고침을해도 호출이안됨...
             count = 1
             setHashmap()
+            replace = true
             presenter.setIsLast(false)
             presenter.moreConnect(hashmap, true)
             Log.d("refresh6", "replaced")
@@ -83,7 +85,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore,MainView {
     override fun onLoadMore() {
         recyclerView.smoothScrollToPosition(recyclerView.layoutManager!!.itemCount)
         Log.e("main", "load count is $count, ${checkLast()}")
-
+        replace = false
         if (!checkLast())// 여기에 프로그레스 추
         {
             adapter.addprogress()
@@ -98,6 +100,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore,MainView {
                 myscroll.setLoaded()
             }, 2000)
         }
+
     }
 
     fun checkLast(): Boolean {
@@ -122,8 +125,10 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore,MainView {
     }
 
     override fun show(items: ArrayList<Monster>) {
-        adapter = ScrollRecyclerAdapter(items, LOAD_TYPE)
-        recyclerView.adapter=adapter
+        if(replace) {
+            adapter = ScrollRecyclerAdapter(items, LOAD_TYPE)
+            recyclerView.adapter = adapter
+        }else adapter.addAll(items)
     }
 
     override fun showError(error: Throwable) {
