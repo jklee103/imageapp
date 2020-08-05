@@ -15,23 +15,26 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
-import com.example.jkapplication.presenter.GlidePresenter
+import com.example.jkapplication.presenter.MorePresenter
+import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.CustomScroll
+import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.ScrollRecyclerAdapter
 
 private const val LOAD_TYPE = "glide"
 
-class ScrollFragment : Fragment(), CustomScroll.onLoadMore {
+class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore,MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
     lateinit var adapter: ScrollRecyclerAdapter
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    lateinit var presenter: GlidePresenter
-    lateinit var button: Button
     lateinit var hashmap: HashMap<String, Int>
     lateinit var myscroll: CustomScroll
     var count = 1
     var mainHandler = Handler()
+    override val presenter by lazy {
+        MorePresenter(this)
+    }
 
 
     override fun onCreateView(
@@ -46,19 +49,13 @@ class ScrollFragment : Fragment(), CustomScroll.onLoadMore {
         recyclerView.setHasFixedSize(true)
 
         var context: Context = this!!.activity!!
-        adapter = ScrollRecyclerAdapter(context, list, LOAD_TYPE) //여기 나중에 어댑터 손보면서 바꿔주기
-
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
-        recyclerView.adapter = adapter
-
         myscroll = CustomScroll(this)
         myscroll.setLoaded()
         recyclerView.addOnScrollListener(myscroll)
-
-        presenter = GlidePresenter(adapter, list)//getlist
 
         setHashmap()
 
@@ -122,10 +119,15 @@ class ScrollFragment : Fragment(), CustomScroll.onLoadMore {
                 INSTANCE = ScrollFragment()
             return INSTANCE!!
         }
+    }
 
-        fun newInstance(): ScrollFragment {
-            return ScrollFragment()
-        }
+    override fun show(items: ArrayList<Monster>) {
+        adapter = ScrollRecyclerAdapter(items, LOAD_TYPE)
+        recyclerView.adapter=adapter
+    }
+
+    override fun showError(error: Throwable) {
+        TODO("Not yet implemented")
     }
 
 }

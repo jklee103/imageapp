@@ -19,13 +19,12 @@ import com.example.jkapplication.view.fragments.MoreFragment
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 
-class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, loadType: String) :
+class MoreRecyclerAdapter(list: java.util.ArrayList<Monster>, loadType: String) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), BaseAdapter {
     private val TYPE_ITEM = 1
     private val TYPE_FOOTER = 2
     private val TYPE_LOADING = 0
 
-    val context = context
     val list = list
     var loadType = loadType
     lateinit var viewGroup: ViewGroup
@@ -65,7 +64,7 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
 
                 if (MoreFragment.getInstance().checkLast()) {
                     holder.more.visibility = View.INVISIBLE
-                    Toast.makeText(context, "List End", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context, "List End", Toast.LENGTH_SHORT).show()
                 } else holder.more.visibility = View.VISIBLE
                 holder.more.setOnClickListener {
                     Log.d("btn", "clicked")

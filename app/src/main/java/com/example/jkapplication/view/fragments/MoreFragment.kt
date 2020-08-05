@@ -14,17 +14,22 @@ import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
 import com.example.jkapplication.presenter.GlidePresenter
+import com.example.jkapplication.presenter.MorePresenter
+import com.example.jkapplication.view.BaseFragment
+import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.MoreRecyclerAdapter
 
 private const val LOAD_TYPE = "glide"
 
-class MoreFragment : Fragment() {
+class MoreFragment : BaseFragment(),MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
     lateinit var adapter: MoreRecyclerAdapter
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    lateinit var presenter: GlidePresenter
     lateinit var hashmap: HashMap<String, Int>
+    override val presenter by lazy {
+        MorePresenter(this)
+    }
 
     var count = 1//페이지
 
@@ -40,16 +45,9 @@ class MoreFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         var context: Context = this!!.activity!!
-        adapter = MoreRecyclerAdapter(context, list, LOAD_TYPE) //여기 나중에 어댑터 손보면서 바꿔주기
-
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-
-        recyclerView.adapter = adapter
-
-
-        presenter = GlidePresenter(adapter, list)//getlist
 
         setHashmap()
 
@@ -102,9 +100,15 @@ class MoreFragment : Fragment() {
                 INSTANCE = MoreFragment()
             return INSTANCE!!
         }
+    }
 
-        fun newInstance(): MoreFragment {
-            return MoreFragment()
-        }
+    override fun show(items: ArrayList<Monster>) {
+        val adapter = MoreRecyclerAdapter(items, LOAD_TYPE)
+        recyclerView.adapter = adapter
+
+    }
+
+    override fun showError(error: Throwable) {
+        TODO("Not yet implemented")
     }
 }

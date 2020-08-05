@@ -12,12 +12,10 @@ import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.squareup.picasso.Picasso
 
-class GlideRecyclerAdapter(context: Context, list: ArrayList<Monster>, loadType: String) :
+class GlideRecyclerAdapter(list: ArrayList<Monster>, loadType: String) :
     RecyclerView.Adapter<GlideRecyclerAdapter.Holder>(), BaseAdapter {
-    val context = context
     val list = list
     var loadType = loadType
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GlideRecyclerAdapter.Holder {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.view_glide, parent, false)

@@ -12,20 +12,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.jkapplication.R
+import com.example.jkapplication.data.network.MainRetrofit
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
 import com.example.jkapplication.presenter.GlidePresenter
+import com.example.jkapplication.view.BaseFragment
+import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
 
 private const val LOAD_TYPE = "glide"
 
-class GlideFragment : Fragment() {
+class GlideFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
     lateinit var adapter: GlideRecyclerAdapter
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    lateinit var ft: FragmentTransaction
-    lateinit var presenter: GlidePresenter
+    override val presenter by lazy {
+        GlidePresenter(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,13 +41,9 @@ class GlideFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         var context: Context = this!!.activity!!
-        adapter = GlideRecyclerAdapter(context, list, LOAD_TYPE) //context호출 맞나....
 
 
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        recyclerView.adapter = adapter
-
-        presenter = GlidePresenter(adapter, list)
 
         presenter.connect()
 
@@ -72,10 +72,16 @@ class GlideFragment : Fragment() {
                 INSTANCE = GlideFragment()
             return INSTANCE!!
         }
+    }
 
-        fun newInstance(): GlideFragment {
-            return GlideFragment()
-        }
+    override fun show(items: ArrayList<Monster>) { //어댑터 생성, 리사이클러뷰에 어댑터 붙이
+        val adapter = GlideRecyclerAdapter(items, LOAD_TYPE)
+        recyclerView.adapter = adapter
+    }
+
+    override fun showError(error: Throwable) {
+        Log.e("tab1","Error: ${error.message}")
+        error.printStackTrace()
     }
 
 }

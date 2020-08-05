@@ -15,17 +15,21 @@ import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
 import com.example.jkapplication.presenter.GlidePresenter
+import com.example.jkapplication.view.BaseFragment
+import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
 
-class PicassoFragment : Fragment() {
+class PicassoFragment : BaseFragment(),MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
     lateinit var adapter: GlideRecyclerAdapter
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     lateinit var ft: FragmentTransaction
-    lateinit var presenter:GlidePresenter
     val LOAD_TYPE = "picasso"
 
+    override val presenter by lazy {
+        GlidePresenter(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,14 +41,9 @@ class PicassoFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         var context: Context = this!!.activity!!
-        adapter = GlideRecyclerAdapter(context, list,LOAD_TYPE) //여기 나중에 어댑터 손보면서 바꿔주기
-
 
         recyclerView.layoutManager = GridLayoutManager(context,2)//recyclerview adapter
-        recyclerView.adapter = adapter
 
-
-        presenter= GlidePresenter(adapter,list)//getlist
         presenter.connect()
 
         swipeRefreshLayout = rootView.findViewById<SwipeRefreshLayout>(R.id.f_picasso_srl_refreshView)
@@ -71,8 +70,15 @@ class PicassoFragment : Fragment() {
             return INSTANCE!!
         }
 
-        fun newInstance(): PicassoFragment {
-            return PicassoFragment()
-        }
+    }
+
+    override fun show(items: ArrayList<Monster>) {
+        val adapter = GlideRecyclerAdapter(items, LOAD_TYPE)
+        recyclerView.adapter = adapter
+    }
+
+    override fun showError(error: Throwable) {
+        Log.e("tab2","Error: ${error.message}")
+        error.printStackTrace()
     }
 }

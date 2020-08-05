@@ -15,7 +15,6 @@ import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 
 class ScrollRecyclerAdapter(
-    context: Context,
     list: java.util.ArrayList<Monster>,
     loadType: String
 ) :
@@ -23,7 +22,6 @@ class ScrollRecyclerAdapter(
     var TYPE_ITEM = 0
     var TYPE_LOADING = 1
 
-    val context = context
     val list = list
     var loadType = loadType
 

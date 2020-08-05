@@ -15,18 +15,22 @@ import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
 import com.example.jkapplication.presenter.GlidePresenter
+import com.example.jkapplication.view.BaseFragment
+import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.FrescoRecyclerAdapter
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val LOAD_TYPE = "fresco"
 
-class FrescoFragment : Fragment() {
+class FrescoFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
     lateinit var adapter: FrescoRecyclerAdapter
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    lateinit var ft: FragmentTransaction
-    lateinit var presenter: GlidePresenter
+    override val presenter by lazy {
+        GlidePresenter(this)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,21 +42,15 @@ class FrescoFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         var context: Context = this!!.activity!!
-        adapter = FrescoRecyclerAdapter(context, list, LOAD_TYPE) //여기 나중에 어댑터 손보면서 바꿔주기
-
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        recyclerView.adapter = adapter
 
-
-        presenter = GlidePresenter(adapter, list)//getlist
         presenter.connect()
 
         swipeRefreshLayout =
             rootView.findViewById<SwipeRefreshLayout>(R.id.f_fresco_srl_refreshView)
 
-        // Inflate the layout for this fragment
         return rootView
     }
 
@@ -78,5 +76,14 @@ class FrescoFragment : Fragment() {
         fun newInstance(): FrescoFragment {
             return FrescoFragment()
         }
+    }
+
+    override fun show(items: ArrayList<Monster>) {
+        val adapter = FrescoRecyclerAdapter(items, LOAD_TYPE)
+        recyclerView.adapter = adapter
+    }
+
+    override fun showError(error: Throwable) {
+        TODO("Not yet implemented")
     }
 }

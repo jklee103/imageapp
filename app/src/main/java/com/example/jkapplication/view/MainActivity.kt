@@ -2,6 +2,7 @@ package com.example.jkapplication.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.jkapplication.R
@@ -32,6 +33,18 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(tabLayout, viewPager){ tab, position ->
             tab.text = "#${(position + 1)}"
         }.attach()
+
+        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+            }
+
+        })
 
 //        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 //            override fun onTabReselected(tab: TabLayout.Tab?) {

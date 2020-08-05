@@ -15,9 +15,9 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 import java.util.*
 
 
-open class FrescoRecyclerAdapter(context: Context, list: ArrayList<Monster>, loadType: String) :
+open class FrescoRecyclerAdapter(list: ArrayList<Monster>, loadType: String) :
     RecyclerView.Adapter<FrescoRecyclerAdapter.Holder>(), BaseAdapter {
-    val context = context
+
     val list = list
     var loadType = loadType
 
