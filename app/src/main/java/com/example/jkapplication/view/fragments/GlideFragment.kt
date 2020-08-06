@@ -16,6 +16,7 @@ import com.example.jkapplication.presenter.GlidePresenter
 import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
+import com.example.jkapplication.view.decoration.ViewItemDecoration
 
 private const val LOAD_TYPE = "glide"
 

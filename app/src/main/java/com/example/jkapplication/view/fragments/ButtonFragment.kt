@@ -17,13 +17,14 @@ import com.example.jkapplication.presenter.PostPresenter
 import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.FrescoRecyclerAdapter
+import com.example.jkapplication.view.decoration.ViewItemDecoration
 
 private const val LOAD_TYPE = "glide"
 
 class ButtonFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
-    lateinit var adapter: FrescoRecyclerAdapter
+    var adapter: FrescoRecyclerAdapter ? = null
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     lateinit var button: Button
     lateinit var checkByString: String
@@ -66,6 +67,9 @@ class ButtonFragment : BaseFragment(), MainView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         swipeRefreshLayout.setOnRefreshListener { //새로고침시 리스트 받아옴
+            button.text = "MONSTER"
+            hashmap.clear()
+            hashmap.put("isMonster", true)
             presenter.postConnect(hashmap)
             Log.d("refresh4", "replaced")
             swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
@@ -88,7 +92,12 @@ class ButtonFragment : BaseFragment(), MainView {
             }
         }
 
+        recyclerView.addItemDecoration(ViewItemDecoration())
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
     companion object {
@@ -102,8 +111,10 @@ class ButtonFragment : BaseFragment(), MainView {
     }
 
     override fun show(items: ArrayList<Monster>) {
-        val adapter = FrescoRecyclerAdapter(items, LOAD_TYPE)
-        recyclerView.adapter = adapter
+        if(adapter == null) {
+            adapter = FrescoRecyclerAdapter(items, LOAD_TYPE)
+            recyclerView.adapter = adapter
+        }else adapter!!.replaceAll(items)
     }
 
     override fun showError(error: Throwable) {

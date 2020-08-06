@@ -19,8 +19,8 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 
 class MoreRecyclerAdapter(list: java.util.ArrayList<Monster>, loadType: String) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), BaseAdapter {
-    private val TYPE_ITEM = 1
-    private val TYPE_FOOTER = 2
+    private val TYPE_ITEM = 0
+    private val TYPE_FOOTER = 1
     private val TYPE_LOADING = 0
 
     val list = list

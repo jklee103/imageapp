@@ -9,9 +9,10 @@
     <ImageView
         android:layout_gravity="center"
         android:id="@+id/v_glide_iv_image"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/view_blank_box"
+        android:adjustViewBounds="true"
         android:background="@android:color/transparent"/>
 
     <TextView

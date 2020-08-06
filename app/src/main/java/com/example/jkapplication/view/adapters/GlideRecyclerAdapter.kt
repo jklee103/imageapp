@@ -15,7 +15,7 @@ class GlideRecyclerAdapter(list: ArrayList<Monster>, loadType: String) :
     RecyclerView.Adapter<GlideRecyclerAdapter.Holder>(), BaseAdapter {
     val list = list
     var loadType = loadType
-
+    var TYPE_ITEM = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GlideRecyclerAdapter.Holder {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.view_glide, parent, false)
         var holder = Holder(view)
@@ -37,9 +37,12 @@ class GlideRecyclerAdapter(list: ArrayList<Monster>, loadType: String) :
         }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return TYPE_ITEM
+    }
+
     override fun glideLoad(holder: Holder, position: Int) {
-        Glide.with(holder.image.context).load(list[position].img_url).override(500, 500)
-            .centerInside().into(holder.image)
+        Glide.with(holder.image.context).load(list[position].img_url).override(500,500).into(holder.image)
 
     }
 

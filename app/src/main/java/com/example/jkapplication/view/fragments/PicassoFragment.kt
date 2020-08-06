@@ -17,6 +17,7 @@ import com.example.jkapplication.presenter.GlidePresenter
 import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
+import com.example.jkapplication.view.decoration.ViewItemDecoration
 
 class PicassoFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
@@ -58,6 +59,7 @@ class PicassoFragment : BaseFragment(), MainView {
             Log.d("refresh2", "replaced")
             swipeRefreshLayout.isRefreshing = false
         }
+
 
     }
 

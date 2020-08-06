@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -16,13 +17,14 @@ import com.example.jkapplication.presenter.MorePresenter
 import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.MoreRecyclerAdapter
+import com.example.jkapplication.view.decoration.ViewItemDecoration
 
 private const val LOAD_TYPE = "glide"
 
 class MoreFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
-    lateinit var adapter: MoreRecyclerAdapter
+    var adapter: MoreRecyclerAdapter ?= null
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     lateinit var hashmap: HashMap<String, Int>
     override val presenter by lazy {
@@ -46,7 +48,6 @@ class MoreFragment : BaseFragment(), MainView {
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-
         setHashmap()
 
         presenter.moreConnect(hashmap)
@@ -69,6 +70,7 @@ class MoreFragment : BaseFragment(), MainView {
             Log.d("refresh5", "replaced")
             swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
         }
+        recyclerView.addItemDecoration(ViewItemDecoration())
     }
 
     fun setHashmap() {
@@ -103,11 +105,14 @@ class MoreFragment : BaseFragment(), MainView {
     }
 
     override fun show(items: ArrayList<Monster>) {
-        if (replace) {
-            adapter = MoreRecyclerAdapter(items, LOAD_TYPE)
-            recyclerView.adapter = adapter
-        } else adapter.addAll(items)
-
+        if (replace||count==1) {
+            if (adapter==null) {
+                adapter = MoreRecyclerAdapter(items, LOAD_TYPE)
+                recyclerView.adapter = adapter
+            }else adapter!!.replaceAll(items)
+        } else {
+            adapter?.addAll(items)
+        }
     }
 
     override fun showError(error: Throwable) {

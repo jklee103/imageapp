@@ -18,7 +18,7 @@ open class FrescoRecyclerAdapter(list: ArrayList<Monster>, loadType: String) :
 
     val list = list
     var loadType = loadType
-
+    var TYPE_ITEM = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.view_fresco, parent, false)
@@ -54,6 +54,10 @@ open class FrescoRecyclerAdapter(list: ArrayList<Monster>, loadType: String) :
         holder.image.aspectRatio =
             (list[position].width.toFloat()) / (list[position].height.toFloat()) //비율 설정해줘야 높이 fit됨
 
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return TYPE_ITEM
     }
 
     override fun replaceAll(items: ArrayList<Monster>) {

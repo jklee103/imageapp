@@ -16,6 +16,7 @@ import com.example.jkapplication.presenter.GlidePresenter
 import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.FrescoRecyclerAdapter
+import com.example.jkapplication.view.decoration.ViewItemDecoration
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val LOAD_TYPE = "fresco"
@@ -59,6 +60,7 @@ class FrescoFragment : BaseFragment(), MainView {
             Log.d("refresh3", "replaced")
             swipeRefreshLayout.isRefreshing = false
         }
+        recyclerView.addItemDecoration(ViewItemDecoration())
 
     }
 

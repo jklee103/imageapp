@@ -18,13 +18,14 @@ import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.CustomScroll
 import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.ScrollRecyclerAdapter
+import com.example.jkapplication.view.decoration.ViewItemDecoration
 
 private const val LOAD_TYPE = "glide"
 
 class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
-    lateinit var adapter: ScrollRecyclerAdapter
+    var adapter: ScrollRecyclerAdapter? = null
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     lateinit var hashmap: HashMap<String, Int>
     lateinit var myscroll: CustomScroll
@@ -55,6 +56,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
         myscroll = CustomScroll(this)
         myscroll.setLoaded()
         recyclerView.addOnScrollListener(myscroll)
+        recyclerView.addItemDecoration(ViewItemDecoration())
 
         setHashmap()
 
@@ -86,10 +88,10 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
         replace = false
         if (!checkLast())// 여기에 프로그레스 추
         {
-            adapter.addprogress()
-            adapter.notifyItemInserted(recyclerView.layoutManager!!.itemCount)
+            adapter?.addprogress()
+            adapter?.notifyItemInserted(recyclerView.layoutManager!!.itemCount)
             mainHandler.postDelayed({
-                adapter.removeprogress()
+                adapter?.removeprogress()
                 count++;
                 hashmap = HashMap<String, Int>()
                 hashmap.put("page", count)
@@ -123,10 +125,12 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
     }
 
     override fun show(items: ArrayList<Monster>) {
-        if (replace) {
-            adapter = ScrollRecyclerAdapter(items, LOAD_TYPE)
-            recyclerView.adapter = adapter
-        } else adapter.addAll(items)
+        if (replace || count == 1) {
+            if (adapter == null) {
+                adapter = ScrollRecyclerAdapter(items, LOAD_TYPE)
+                recyclerView.adapter = adapter
+            } else adapter!!.replaceAll(items)
+        } else adapter?.addAll(items)
     }
 
     override fun showError(error: Throwable) {
