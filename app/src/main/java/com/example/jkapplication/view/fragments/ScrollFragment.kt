@@ -58,7 +58,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
 
         setHashmap()
 
-        presenter.moreConnect(hashmap, true)
+        presenter.moreConnect(hashmap)
 
         swipeRefreshLayout =
             rootView.findViewById<SwipeRefreshLayout>(R.id.f_scroll_srl_refreshView)
@@ -73,7 +73,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
             setHashmap()
             replace = true
             presenter.setIsLast(false)
-            presenter.moreConnect(hashmap, true)
+            presenter.moreConnect(hashmap)
             Log.d("refresh6", "replaced")
             myscroll.setLoaded()
             swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
@@ -94,7 +94,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
                 hashmap = HashMap<String, Int>()
                 hashmap.put("page", count)
                 hashmap.put("perpage", 5)
-                presenter.moreConnect(hashmap, false)
+                presenter.moreConnect(hashmap)
                 myscroll.setLoaded()
             }, 2000)
         }

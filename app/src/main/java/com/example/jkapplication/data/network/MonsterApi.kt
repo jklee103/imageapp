@@ -28,4 +28,16 @@ interface MonsterApi {
     @GET("images")
     fun getImages2(): Single<ImagesResponse?>
 
+    @Headers("Content-Type: application/json")
+    @POST("images")
+    fun getPostImages2(
+        @Body body:HashMap<String,Boolean>
+    ):Single<PostImagesResponse?>
+
+    @Headers("Content-Type: application/json")
+    @POST("imagelist")
+    fun getMoreImages2(
+        @Body body:HashMap<String,Int>
+    ):Single<PostImagesResponse?>
+
 }

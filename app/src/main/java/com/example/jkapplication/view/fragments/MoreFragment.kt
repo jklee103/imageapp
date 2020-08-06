@@ -49,7 +49,7 @@ class MoreFragment : BaseFragment(), MainView {
 
         setHashmap()
 
-        presenter.moreConnect(hashmap, true)
+        presenter.moreConnect(hashmap)
 
         swipeRefreshLayout =
             rootView.findViewById<SwipeRefreshLayout>(R.id.f_more_srl_refreshView)
@@ -65,7 +65,7 @@ class MoreFragment : BaseFragment(), MainView {
             setHashmap()
             replace = true
             presenter.setIsLast(false)
-            presenter.moreConnect(hashmap, true)
+            presenter.moreConnect(hashmap)
             Log.d("refresh5", "replaced")
             swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
         }
@@ -84,7 +84,7 @@ class MoreFragment : BaseFragment(), MainView {
         hashmap = HashMap<String, Int>()
         hashmap.put("page", count)
         hashmap.put("perpage", 5)
-        presenter.moreConnect(hashmap, false)
+        presenter.moreConnect(hashmap)
     }
 
     fun checkLast(): Boolean {
