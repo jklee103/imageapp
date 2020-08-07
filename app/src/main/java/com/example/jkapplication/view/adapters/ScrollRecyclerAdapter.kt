@@ -11,6 +11,7 @@ import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.getProgressItem
 import com.facebook.drawee.view.SimpleDraweeView
+import com.facebook.imagepipeline.common.ResizeOptions
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 
 class ScrollRecyclerAdapter(
@@ -92,6 +93,7 @@ class ScrollRecyclerAdapter(
     fun moreLoad(holder: ScrollRecyclerAdapter.Holder, position: Int) {
         val imageRequest =
             ImageRequestBuilder.newBuilderWithSource(Uri.parse(list[position].img_url))
+                .setResizeOptions(ResizeOptions(300,300))
                 .build()
         holder.image.setImageRequest(imageRequest)
         holder.image.aspectRatio =

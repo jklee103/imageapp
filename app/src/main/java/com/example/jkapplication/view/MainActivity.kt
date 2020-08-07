@@ -3,6 +3,8 @@ package com.example.jkapplication.view
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.jkapplication.R
@@ -34,17 +36,16 @@ class MainActivity : AppCompatActivity() {
             tab.text = "#${(position + 1)}"
         }.attach()
 
-        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-            }
-
-        })
+        fun stopScrollVertical(){
+            viewPager.setOnTouchListener(object : View.OnTouchListener{
+                override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
+                    return true
+                }
+            })
+        }
+        fun resumeScrollVertical(){
+            viewPager.setOnTouchListener(null)
+        }
 
 //        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 //            override fun onTabReselected(tab: TabLayout.Tab?) {

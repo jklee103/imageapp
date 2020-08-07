@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ import com.example.jkapplication.presenter.MorePresenter
 import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.CustomScroll
 import com.example.jkapplication.view.MainView
+import com.example.jkapplication.view.ScrollManager
 import com.example.jkapplication.view.adapters.ScrollRecyclerAdapter
 import com.example.jkapplication.view.decoration.ViewItemDecoration
 
@@ -29,6 +31,8 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     lateinit var hashmap: HashMap<String, Int>
     lateinit var myscroll: CustomScroll
+    lateinit var rootView: View
+
     var replace: Boolean = true
     var count = 1
     var mainHandler = Handler()
@@ -42,13 +46,12 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        var rootView = inflater.inflate(R.layout.fragment_scroll, container, false)
+        rootView = inflater.inflate(R.layout.fragment_scroll, container, false)
+
 
         recyclerView = rootView.findViewById(R.id.f_scroll_rv_recyclerView)
         list = createContactsList(5)//demo list
         recyclerView.setHasFixedSize(true)
-
-        var context: Context = this!!.activity!!
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -56,7 +59,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
         myscroll = CustomScroll(this)
         myscroll.setLoaded()
         recyclerView.addOnScrollListener(myscroll)
-        recyclerView.addItemDecoration(ViewItemDecoration())
+
 
         setHashmap()
 
@@ -71,6 +74,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         swipeRefreshLayout.setOnRefreshListener { //onloadmore 끝까지 호출후에는 새로고침을해도 호출이안됨...
+
             count = 1
             setHashmap()
             replace = true
@@ -80,12 +84,15 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
             myscroll.setLoaded()
             swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
         }
+
+        recyclerView.addItemDecoration(ViewItemDecoration())
     }
 
     override fun onLoadMore() {
         recyclerView.smoothScrollToPosition(recyclerView.layoutManager!!.itemCount)
         Log.e("main", "load count is $count, ${checkLast()}")
         replace = false
+
         if (!checkLast())// 여기에 프로그레스 추
         {
             adapter?.addprogress()
@@ -131,10 +138,13 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
                 recyclerView.adapter = adapter
             } else adapter!!.replaceAll(items)
         } else adapter?.addAll(items)
+
     }
 
     override fun showError(error: Throwable) {
         TODO("Not yet implemented")
     }
+
+
 
 }

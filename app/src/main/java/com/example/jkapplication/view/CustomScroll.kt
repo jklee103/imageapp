@@ -24,4 +24,5 @@ class CustomScroll(private val listener:onLoadMore):RecyclerView.OnScrollListene
     fun setLoaded() {
         loading = false
     }
+
 }

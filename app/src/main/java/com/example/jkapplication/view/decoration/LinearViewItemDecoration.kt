@@ -1,12 +1,10 @@
 package com.example.jkapplication.view.decoration
 
 import android.graphics.Rect
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
-class ViewItemDecoration : RecyclerView.ItemDecoration() {
+class LinearViewItemDecoration: RecyclerView.ItemDecoration() {
     var TYPE_ITEM = 0
 
     override fun getItemOffsets(
@@ -17,18 +15,14 @@ class ViewItemDecoration : RecyclerView.ItemDecoration() {
     ) {
         super.getItemOffsets(outRect, view, parent, state)
         var position = parent.getChildAdapterPosition(view)
-        var layoutParams = view.layoutParams as StaggeredGridLayoutManager.LayoutParams
-        var spanIndex = layoutParams.spanIndex
+        var layoutParams = view.layoutParams as RecyclerView.LayoutParams
         if(position>=0) {
             var type = parent.adapter!!.getItemViewType(position) //getAdapter 되는지 확인
-            outRect.bottom = 20
-            outRect.top = 20
+            outRect.bottom = 40
+            outRect.top = 40
             when (type) {
-                TYPE_ITEM -> if (spanIndex == 0) {
+                TYPE_ITEM ->{
                     outRect.left = 40
-                    outRect.right = 20
-                } else {
-                    outRect.left = 20
                     outRect.right = 40
                 }
             }

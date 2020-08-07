@@ -16,6 +16,8 @@ import com.example.jkapplication.presenter.GlidePresenter
 import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
+import com.example.jkapplication.view.decoration.GridViewItemDecoration
+import com.example.jkapplication.view.decoration.LinearViewItemDecoration
 import com.example.jkapplication.view.decoration.ViewItemDecoration
 
 private const val LOAD_TYPE = "glide"
@@ -42,7 +44,7 @@ class GlideFragment : BaseFragment(), MainView {
 
 
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-
+        recyclerView.addItemDecoration(LinearViewItemDecoration())
         presenter.connect()
 
         //swiperefresh

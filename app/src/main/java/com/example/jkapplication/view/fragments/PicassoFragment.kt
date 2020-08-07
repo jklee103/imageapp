@@ -17,6 +17,7 @@ import com.example.jkapplication.presenter.GlidePresenter
 import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
+import com.example.jkapplication.view.decoration.GridViewItemDecoration
 import com.example.jkapplication.view.decoration.ViewItemDecoration
 
 class PicassoFragment : BaseFragment(), MainView {
@@ -43,6 +44,7 @@ class PicassoFragment : BaseFragment(), MainView {
         var context: Context = this!!.activity!!
 
         recyclerView.layoutManager = GridLayoutManager(context, 2)//recyclerview adapter
+        recyclerView.addItemDecoration(GridViewItemDecoration())
 
         presenter.connect()
 
