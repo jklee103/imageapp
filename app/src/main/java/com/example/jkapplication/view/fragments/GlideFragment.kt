@@ -45,10 +45,14 @@ class GlideFragment : BaseFragment(), MainView {
 
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         recyclerView.addItemDecoration(LinearViewItemDecoration())
+        adapter = GlideRecyclerAdapter(arrayListOf(), LOAD_TYPE)
+        recyclerView.adapter = adapter
+
         presenter.connect()
 
         //swiperefresh
         swipeRefreshLayout = rootView.findViewById<SwipeRefreshLayout>(R.id.f_glide_srl_refreshView)
+
 
         return rootView
     }
@@ -75,8 +79,8 @@ class GlideFragment : BaseFragment(), MainView {
     }
 
     override fun show(items: ArrayList<Monster>) { //어댑터 생성, 리사이클러뷰에 어댑터 붙이
-        val adapter = GlideRecyclerAdapter(items, LOAD_TYPE)
-        recyclerView.adapter = adapter
+        adapter.replaceAll(items)
+        recyclerView.smoothScrollToPosition(0) //notify 하고나서 화면에 리사이클러 안뜨는거 방지
     }
 
     override fun showError(error: Throwable) {

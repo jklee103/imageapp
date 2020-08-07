@@ -46,6 +46,9 @@ class PicassoFragment : BaseFragment(), MainView {
         recyclerView.layoutManager = GridLayoutManager(context, 2)//recyclerview adapter
         recyclerView.addItemDecoration(GridViewItemDecoration())
 
+        adapter = GlideRecyclerAdapter(arrayListOf(), LOAD_TYPE)
+        recyclerView.adapter = adapter
+
         presenter.connect()
 
         swipeRefreshLayout =
@@ -56,6 +59,7 @@ class PicassoFragment : BaseFragment(), MainView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         swipeRefreshLayout.setOnRefreshListener {
             presenter.connect()
             Log.d("refresh2", "replaced")
@@ -77,8 +81,8 @@ class PicassoFragment : BaseFragment(), MainView {
     }
 
     override fun show(items: ArrayList<Monster>) {
-        val adapter = GlideRecyclerAdapter(items, LOAD_TYPE)
-        recyclerView.adapter = adapter
+        adapter.replaceAll(items)
+        recyclerView.smoothScrollToPosition(0)
     }
 
     override fun showError(error: Throwable) {

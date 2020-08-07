@@ -54,12 +54,16 @@ class ButtonFragment : BaseFragment(), MainView {
         hashmap = HashMap<String, Boolean>()
         hashmap.put("isMonster", true)
 
+        adapter = FrescoRecyclerAdapter(arrayListOf(), LOAD_TYPE)
+        recyclerView.adapter = adapter
+
         presenter.postConnect(hashmap)
 
         swipeRefreshLayout =
             rootView.findViewById<SwipeRefreshLayout>(R.id.f_button_srl_refreshView)
 
         button = rootView.findViewById<Button>(R.id.f_button_btn_monster)
+
 
         return rootView
     }
@@ -96,10 +100,6 @@ class ButtonFragment : BaseFragment(), MainView {
 
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
     companion object {
         var INSTANCE: ButtonFragment? = null
 
@@ -111,10 +111,8 @@ class ButtonFragment : BaseFragment(), MainView {
     }
 
     override fun show(items: ArrayList<Monster>) {
-        if(adapter == null) {
-            adapter = FrescoRecyclerAdapter(items, LOAD_TYPE)
-            recyclerView.adapter = adapter
-        }else adapter!!.replaceAll(items)
+        adapter!!.replaceAll(items)
+        recyclerView.smoothScrollToPosition(list.size-1)
     }
 
     override fun showError(error: Throwable) {

@@ -40,6 +40,7 @@ class MoreFragment : BaseFragment(), MainView {
     ): View? {
         var rootView = inflater.inflate(R.layout.fragment_more, container, false)
 
+        replace = true
         recyclerView = rootView.findViewById(R.id.f_more_rv_recyclerView)
         list = createContactsList(5)//demo list
         recyclerView.setHasFixedSize(true)
@@ -50,8 +51,10 @@ class MoreFragment : BaseFragment(), MainView {
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         setHashmap()
 
-        presenter.moreConnect(hashmap)
+        adapter = MoreRecyclerAdapter(arrayListOf(), LOAD_TYPE)
+        recyclerView.adapter = adapter
 
+        presenter.moreConnect(hashmap)
         swipeRefreshLayout =
             rootView.findViewById<SwipeRefreshLayout>(R.id.f_more_srl_refreshView)
 
@@ -61,6 +64,7 @@ class MoreFragment : BaseFragment(), MainView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recyclerView.addItemDecoration(ViewItemDecoration())
         swipeRefreshLayout.setOnRefreshListener { //새로고침시 리스트 받아옴
             count = 1
             setHashmap()
@@ -70,7 +74,7 @@ class MoreFragment : BaseFragment(), MainView {
             Log.d("refresh5", "replaced")
             swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
         }
-        recyclerView.addItemDecoration(ViewItemDecoration())
+
     }
 
     fun setHashmap() {
@@ -106,12 +110,11 @@ class MoreFragment : BaseFragment(), MainView {
 
     override fun show(items: ArrayList<Monster>) {
         if (replace||count==1) {
-            if (adapter==null) {
-                adapter = MoreRecyclerAdapter(items, LOAD_TYPE)
-                recyclerView.adapter = adapter
-            }else adapter!!.replaceAll(items)
+            adapter!!.replaceAll(items)
+            recyclerView.smoothScrollToPosition(list.size-1)
         } else {
             adapter?.addAll(items)
+            recyclerView.smoothScrollToPosition(list.size-1)
         }
     }
 

@@ -48,22 +48,25 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_scroll, container, false)
 
+        replace = true
 
         recyclerView = rootView.findViewById(R.id.f_scroll_rv_recyclerView)
         list = createContactsList(5)//demo list
-        recyclerView.setHasFixedSize(true)
+        //recyclerView.setHasFixedSize(true)
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
-        myscroll = CustomScroll(this)
+        myscroll = CustomScroll(this) //스크롤 설정
         myscroll.setLoaded()
         recyclerView.addOnScrollListener(myscroll)
 
+        adapter = ScrollRecyclerAdapter(arrayListOf(), LOAD_TYPE) //어댑터 생성
+        recyclerView.adapter = adapter
 
-        setHashmap()
+        setHashmap() //해쉬맵 초기화
 
-        presenter.moreConnect(hashmap)
+        presenter.moreConnect(hashmap) //데이터 불러와서 show
 
         swipeRefreshLayout =
             rootView.findViewById<SwipeRefreshLayout>(R.id.f_scroll_srl_refreshView)
@@ -73,6 +76,8 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recyclerView.addItemDecoration(ViewItemDecoration())
+        recyclerView.smoothScrollToPosition(0)
         swipeRefreshLayout.setOnRefreshListener { //onloadmore 끝까지 호출후에는 새로고침을해도 호출이안됨...
 
             count = 1
@@ -84,8 +89,6 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
             myscroll.setLoaded()
             swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
         }
-
-        recyclerView.addItemDecoration(ViewItemDecoration())
     }
 
     override fun onLoadMore() {
@@ -133,11 +136,11 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
 
     override fun show(items: ArrayList<Monster>) {
         if (replace || count == 1) {
-            if (adapter == null) {
-                adapter = ScrollRecyclerAdapter(items, LOAD_TYPE)
-                recyclerView.adapter = adapter
-            } else adapter!!.replaceAll(items)
-        } else adapter?.addAll(items)
+            adapter!!.replaceAll(items)
+            recyclerView.smoothScrollToPosition(list.size-1)
+        } else {
+            adapter?.addAll(items)
+        }
 
     }
 

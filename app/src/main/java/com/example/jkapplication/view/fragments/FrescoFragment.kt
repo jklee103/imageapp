@@ -24,7 +24,7 @@ private const val LOAD_TYPE = "fresco"
 class FrescoFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
-    lateinit var adapter: FrescoRecyclerAdapter
+    var adapter: FrescoRecyclerAdapter ?= null
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     override val presenter by lazy {
         GlidePresenter(this)
@@ -44,7 +44,8 @@ class FrescoFragment : BaseFragment(), MainView {
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-
+        adapter = FrescoRecyclerAdapter(arrayListOf(), LOAD_TYPE)
+        recyclerView.adapter = adapter
         presenter.connect()
 
         swipeRefreshLayout =
@@ -55,6 +56,7 @@ class FrescoFragment : BaseFragment(), MainView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recyclerView.smoothScrollToPosition(0)
         swipeRefreshLayout.setOnRefreshListener {
             presenter.connect()
             Log.d("refresh3", "replaced")
@@ -73,14 +75,11 @@ class FrescoFragment : BaseFragment(), MainView {
             return INSTANCE!!
         }
 
-        fun newInstance(): FrescoFragment {
-            return FrescoFragment()
-        }
     }
 
     override fun show(items: ArrayList<Monster>) {
-        val adapter = FrescoRecyclerAdapter(items, LOAD_TYPE)
-        recyclerView.adapter = adapter
+        adapter?.replaceAll(items)
+        recyclerView.smoothScrollToPosition(0)
     }
 
     override fun showError(error: Throwable) {
