@@ -85,7 +85,6 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
         recyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
             override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
             }
-
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                 when (e.action) {
                     MotionEvent.ACTION_DOWN -> { // touch down
@@ -97,10 +96,8 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
                 }
                 return false
             }
-
             override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
             }
-
         })
 
         swipeRefreshLayout.setOnRefreshListener { //onloadmore 끝까지 호출후에는 새로고침을해도 호출이안됨...
@@ -110,8 +107,8 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
             replace = true
             presenter.setIsLast(false)
             presenter.moreConnect(hashmap)
-            Log.d("refresh6", "replaced")
             myscroll.setLoaded()
+            Log.d("refresh6", "replaced")
             swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
         }
     }
@@ -120,7 +117,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
         recyclerView.smoothScrollToPosition(recyclerView.layoutManager!!.itemCount)
         Log.e("main", "load count is $count, ${checkLast()}")
         replace = false
-
+        swipeRefreshLayout.isEnabled = false
         if (!checkLast())// 여기에 프로그레스 추
         {
             adapter?.addprogress()
@@ -133,8 +130,9 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
                 hashmap.put("perpage", 5)
                 presenter.moreConnect(hashmap)
                 myscroll.setLoaded()
+                swipeRefreshLayout.isEnabled=true
             }, 2000)
-        }
+        } else swipeRefreshLayout.isEnabled=true
 
     }
 

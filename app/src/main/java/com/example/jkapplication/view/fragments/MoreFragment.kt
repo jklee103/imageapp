@@ -91,6 +91,7 @@ class MoreFragment : BaseFragment(), MainView {
         hashmap.put("page", count)
         hashmap.put("perpage", 5)
         presenter.moreConnect(hashmap)
+        swipeRefreshLayout.isEnabled = true
     }
 
     fun checkLast(): Boolean {
@@ -114,7 +115,7 @@ class MoreFragment : BaseFragment(), MainView {
             recyclerView.smoothScrollToPosition(list.size-1)
         } else {
             adapter?.addAll(items)
-            recyclerView.smoothScrollToPosition(list.size-1)
+            //recyclerView.smoothScrollToPosition(list.size-1)
         }
     }
 

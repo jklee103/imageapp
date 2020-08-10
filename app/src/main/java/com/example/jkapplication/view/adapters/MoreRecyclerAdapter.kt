@@ -62,13 +62,14 @@ class MoreRecyclerAdapter(list: java.util.ArrayList<Monster>, loadType: String) 
                 params.isFullSpan = true //  이거하면 얘만 너비꽉차게 보
 
                 if (MoreFragment.getInstance().checkLast()) {
-                    holder.more.visibility = View.INVISIBLE
+                    holder.more.visibility = View.GONE
                     //Toast.makeText(context, "List End", Toast.LENGTH_SHORT).show()
                 } else holder.more.visibility = View.VISIBLE
                 holder.more.setOnClickListener {
                     Log.d("btn", "clicked")
                     holder.more.visibility = View.INVISIBLE
                     holder.progress.visibility = View.VISIBLE
+                    MoreFragment.getInstance().swipeRefreshLayout.isEnabled = false
                     mainHandler.postDelayed({
                         holder.progress.visibility = View.GONE
                         MoreFragment.getInstance().onLoadMore()
