@@ -13,11 +13,11 @@ fun <T> Single<T>.applySchedulers(): Single<T> = this
 
 //subscribe는 호출 세부사항을 알아볼 수가 없어서 따로 메소드 정의
 fun <T> Single<T>.subscribeBy(
-    onError: ((Throwable) ->Unit)? = null,
-    onSuccess: (T) ->Unit
-):Disposable =subscribe(onSuccess,{onError?.invoke(it)})
+    onError: ((Throwable) -> Unit)? = null,
+    onSuccess: (T) -> Unit
+): Disposable = subscribe(onSuccess, { onError?.invoke(it) })
 
 //새 구독을 편하게 추가하려고 더하기 할당연산자 추가
-operator fun CompositeDisposable.plusAssign(disposable: Disposable){
+operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
     add(disposable)
 }

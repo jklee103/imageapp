@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.jkapplication.R
 import com.example.jkapplication.view.adapters.PagerAdapter
@@ -36,16 +37,8 @@ class MainActivity : AppCompatActivity() {
             tab.text = "#${(position + 1)}"
         }.attach()
 
-        fun stopScrollVertical(){
-            viewPager.setOnTouchListener(object : View.OnTouchListener{
-                override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
-                    return true
-                }
-            })
-        }
-        fun resumeScrollVertical(){
-            viewPager.setOnTouchListener(null)
-        }
+        viewPager.reduceDragSensitivity()
+
 
 //        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 //            override fun onTabReselected(tab: TabLayout.Tab?) {

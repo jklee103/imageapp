@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.viewpager2.widget.ViewPager2
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
@@ -18,7 +19,6 @@ import com.example.jkapplication.presenter.MorePresenter
 import com.example.jkapplication.view.BaseFragment
 import com.example.jkapplication.view.CustomScroll
 import com.example.jkapplication.view.MainView
-import com.example.jkapplication.view.ScrollManager
 import com.example.jkapplication.view.adapters.ScrollRecyclerAdapter
 import com.example.jkapplication.view.decoration.ViewItemDecoration
 
@@ -32,6 +32,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
     lateinit var hashmap: HashMap<String, Int>
     lateinit var myscroll: CustomScroll
     lateinit var rootView: View
+    lateinit var vp: ViewPager2
 
     var replace: Boolean = true
     var count = 1
@@ -71,6 +72,8 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
         swipeRefreshLayout =
             rootView.findViewById<SwipeRefreshLayout>(R.id.f_scroll_srl_refreshView)
 
+        vp = this.activity!!.findViewById(R.id.view_pager)
+
         return rootView
     }
 
@@ -78,6 +81,28 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
         super.onViewCreated(view, savedInstanceState)
         recyclerView.addItemDecoration(ViewItemDecoration())
         recyclerView.smoothScrollToPosition(0)
+
+        recyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
+            }
+
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                when (e.action) {
+                    MotionEvent.ACTION_DOWN -> { // touch down
+                        //vp.isUserInputEnabled = false
+                    }
+                    MotionEvent.ACTION_UP -> { //손뗐을때
+                        //vp.isUserInputEnabled = false
+                    }
+                }
+                return false
+            }
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+            }
+
+        })
+
         swipeRefreshLayout.setOnRefreshListener { //onloadmore 끝까지 호출후에는 새로고침을해도 호출이안됨...
 
             count = 1
@@ -137,7 +162,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
     override fun show(items: ArrayList<Monster>) {
         if (replace || count == 1) {
             adapter!!.replaceAll(items)
-            recyclerView.smoothScrollToPosition(list.size-1)
+            recyclerView.smoothScrollToPosition(list.size - 1)
         } else {
             adapter?.addAll(items)
         }
@@ -147,7 +172,6 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
     override fun showError(error: Throwable) {
         TODO("Not yet implemented")
     }
-
 
 
 }
