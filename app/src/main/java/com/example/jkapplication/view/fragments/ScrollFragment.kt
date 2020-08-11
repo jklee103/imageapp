@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -65,6 +66,7 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
         adapter = ScrollRecyclerAdapter(arrayListOf(), LOAD_TYPE) //어댑터 생성
         recyclerView.adapter = adapter
 
+
         setHashmap() //해쉬맵 초기화
 
         presenter.moreConnect(hashmap) //데이터 불러와서 show
@@ -79,12 +81,14 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         recyclerView.addItemDecoration(ViewItemDecoration())
         recyclerView.smoothScrollToPosition(0)
 
         recyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
             override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
             }
+
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                 when (e.action) {
                     MotionEvent.ACTION_DOWN -> { // touch down
@@ -96,12 +100,12 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
                 }
                 return false
             }
+
             override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
             }
         })
 
         swipeRefreshLayout.setOnRefreshListener { //onloadmore 끝까지 호출후에는 새로고침을해도 호출이안됨...
-
             count = 1
             setHashmap()
             replace = true
@@ -110,14 +114,15 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
             myscroll.setLoaded()
             Log.d("refresh6", "replaced")
             swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
+
         }
     }
 
     override fun onLoadMore() {
+
         recyclerView.smoothScrollToPosition(recyclerView.layoutManager!!.itemCount)
-        Log.e("main", "load count is $count, ${checkLast()}")
+        //Log.e("main", "load count is $count, ${checkLast()}")
         replace = false
-        swipeRefreshLayout.isEnabled = false
         if (!checkLast())// 여기에 프로그레스 추
         {
             adapter?.addprogress()
@@ -130,9 +135,9 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
                 hashmap.put("perpage", 5)
                 presenter.moreConnect(hashmap)
                 myscroll.setLoaded()
-                swipeRefreshLayout.isEnabled=true
             }, 2000)
-        } else swipeRefreshLayout.isEnabled=true
+        }
+
 
     }
 
@@ -161,8 +166,10 @@ class ScrollFragment : BaseFragment(), CustomScroll.onLoadMore, MainView {
         if (replace || count == 1) {
             adapter!!.replaceAll(items)
             recyclerView.smoothScrollToPosition(list.size - 1)
+            swipeRefreshLayout.isEnabled = false//처음에 데이터 몇개 없는데 새로고침할때 스크롤 리스너랑 겹치는거 방ㅈㅣ
         } else {
             adapter?.addAll(items)
+            swipeRefreshLayout.isEnabled = true
         }
 
     }

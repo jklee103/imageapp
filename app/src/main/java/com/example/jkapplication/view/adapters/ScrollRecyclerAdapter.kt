@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.getProgressItem
+import com.example.jkapplication.view.fragments.ScrollFragment
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.common.ResizeOptions
 import com.facebook.imagepipeline.request.ImageRequestBuilder
@@ -19,18 +20,16 @@ class ScrollRecyclerAdapter(
     loadType: String
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), BaseAdapter {
-    var TYPE_ITEM = 0
-    var TYPE_LOADING = 1
+    val TYPE_ITEM = 0
+    val TYPE_LOADING = 1
 
     val list = list
     var loadType = loadType
 
 
     override fun getItemViewType(position: Int): Int {
-        return if (list[position].img_url != "progress")
-            TYPE_ITEM
-        else
-            TYPE_LOADING
+        return if (list[position].img_url != "progress"&&list[position].img_url != "empty") TYPE_ITEM
+        else TYPE_LOADING
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -40,7 +39,8 @@ class ScrollRecyclerAdapter(
             var holder = Holder(view)
             holder.image.hierarchy.setPlaceholderImage(R.drawable.view_blank_box)
             return holder
-        } else {
+        }
+        else {
             val view =
                 LayoutInflater.from(parent.context).inflate(R.layout.item_progress, parent, false)
             return ProgressHolder(view)
