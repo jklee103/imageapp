@@ -6,8 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -15,17 +13,23 @@ import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
 import com.example.jkapplication.presenter.GlidePresenter
+import com.example.jkapplication.view.BaseFragment
+import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
+import com.example.jkapplication.view.decoration.GridViewItemDecoration
+import com.example.jkapplication.view.decoration.LinearViewItemDecoration
+import com.example.jkapplication.view.decoration.ViewItemDecoration
 
 private const val LOAD_TYPE = "glide"
 
-class GlideFragment : Fragment() {
+class GlideFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
     lateinit var adapter: GlideRecyclerAdapter
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    lateinit var ft: FragmentTransaction
-    lateinit var presenter: GlidePresenter
+    override val presenter by lazy {
+        GlidePresenter(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,18 +41,18 @@ class GlideFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         var context: Context = this!!.activity!!
-        adapter = GlideRecyclerAdapter(context, list, LOAD_TYPE) //context호출 맞나....
 
 
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        recyclerView.addItemDecoration(LinearViewItemDecoration())
+        adapter = GlideRecyclerAdapter(arrayListOf(), LOAD_TYPE)
         recyclerView.adapter = adapter
-
-        presenter = GlidePresenter(adapter, list)
 
         presenter.connect()
 
         //swiperefresh
         swipeRefreshLayout = rootView.findViewById<SwipeRefreshLayout>(R.id.f_glide_srl_refreshView)
+
 
         return rootView
     }
@@ -72,10 +76,16 @@ class GlideFragment : Fragment() {
                 INSTANCE = GlideFragment()
             return INSTANCE!!
         }
+    }
 
-        fun newInstance(): GlideFragment {
-            return GlideFragment()
-        }
+    override fun show(items: ArrayList<Monster>) { //어댑터 생성, 리사이클러뷰에 어댑터 붙이
+        adapter.replaceAll(items)
+        recyclerView.smoothScrollToPosition(0) //notify 하고나서 화면에 리사이클러 안뜨는거 방지
+    }
+
+    override fun showError(error: Throwable) {
+        Log.e("tab1", "Error: ${error.message}")
+        error.printStackTrace()
     }
 
 }

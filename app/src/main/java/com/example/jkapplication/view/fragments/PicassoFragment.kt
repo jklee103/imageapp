@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,17 +14,23 @@ import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
 import com.example.jkapplication.presenter.GlidePresenter
+import com.example.jkapplication.view.BaseFragment
+import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.GlideRecyclerAdapter
+import com.example.jkapplication.view.decoration.GridViewItemDecoration
+import com.example.jkapplication.view.decoration.ViewItemDecoration
 
-class PicassoFragment : Fragment() {
+class PicassoFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
     lateinit var adapter: GlideRecyclerAdapter
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
     lateinit var ft: FragmentTransaction
-    lateinit var presenter:GlidePresenter
     val LOAD_TYPE = "picasso"
 
+    override val presenter by lazy {
+        GlidePresenter(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,28 +42,30 @@ class PicassoFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         var context: Context = this!!.activity!!
-        adapter = GlideRecyclerAdapter(context, list,LOAD_TYPE) //여기 나중에 어댑터 손보면서 바꿔주기
 
+        recyclerView.layoutManager = GridLayoutManager(context, 2)//recyclerview adapter
+        recyclerView.addItemDecoration(GridViewItemDecoration())
 
-        recyclerView.layoutManager = GridLayoutManager(context,2)//recyclerview adapter
+        adapter = GlideRecyclerAdapter(arrayListOf(), LOAD_TYPE)
         recyclerView.adapter = adapter
 
-
-        presenter= GlidePresenter(adapter,list)//getlist
         presenter.connect()
 
-        swipeRefreshLayout = rootView.findViewById<SwipeRefreshLayout>(R.id.f_picasso_srl_refreshView)
+        swipeRefreshLayout =
+            rootView.findViewById<SwipeRefreshLayout>(R.id.f_picasso_srl_refreshView)
 
         return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        swipeRefreshLayout.setOnRefreshListener{
+
+        swipeRefreshLayout.setOnRefreshListener {
             presenter.connect()
-            Log.d("refresh2","replaced")
+            Log.d("refresh2", "replaced")
             swipeRefreshLayout.isRefreshing = false
         }
+
 
     }
 
@@ -71,8 +78,15 @@ class PicassoFragment : Fragment() {
             return INSTANCE!!
         }
 
-        fun newInstance(): PicassoFragment {
-            return PicassoFragment()
-        }
+    }
+
+    override fun show(items: ArrayList<Monster>) {
+        adapter.replaceAll(items)
+        recyclerView.smoothScrollToPosition(0)
+    }
+
+    override fun showError(error: Throwable) {
+        Log.e("tab2", "Error: ${error.message}")
+        error.printStackTrace()
     }
 }

@@ -7,29 +7,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
-import com.example.jkapplication.presenter.GlidePresenter
+import com.example.jkapplication.presenter.PostPresenter
+import com.example.jkapplication.view.BaseFragment
+import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.FrescoRecyclerAdapter
+import com.example.jkapplication.view.decoration.ViewItemDecoration
 
 private const val LOAD_TYPE = "glide"
 
-class ButtonFragment : Fragment() {
+class ButtonFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
-    lateinit var adapter: FrescoRecyclerAdapter
+    var adapter: FrescoRecyclerAdapter ? = null
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    lateinit var ft: FragmentTransaction
-    lateinit var presenter: GlidePresenter
     lateinit var button: Button
     lateinit var checkByString: String
     lateinit var hashmap: HashMap<String, Boolean>
+    override val presenter by lazy {
+        PostPresenter(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,18 +47,15 @@ class ButtonFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         var context: Context = this!!.activity!!
-        adapter = FrescoRecyclerAdapter(context, list, LOAD_TYPE) //여기 나중에 어댑터 손보면서 바꿔주기
-
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        recyclerView.adapter = adapter
-
-
-        presenter = GlidePresenter(adapter, list)//getlist
 
         hashmap = HashMap<String, Boolean>()
         hashmap.put("isMonster", true)
+
+        adapter = FrescoRecyclerAdapter(arrayListOf(), LOAD_TYPE)
+        recyclerView.adapter = adapter
 
         presenter.postConnect(hashmap)
 
@@ -65,12 +64,16 @@ class ButtonFragment : Fragment() {
 
         button = rootView.findViewById<Button>(R.id.f_button_btn_monster)
 
+
         return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         swipeRefreshLayout.setOnRefreshListener { //새로고침시 리스트 받아옴
+            button.text = "MONSTER"
+            hashmap.clear()
+            hashmap.put("isMonster", true)
             presenter.postConnect(hashmap)
             Log.d("refresh4", "replaced")
             swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
@@ -93,6 +96,7 @@ class ButtonFragment : Fragment() {
             }
         }
 
+        recyclerView.addItemDecoration(ViewItemDecoration())
 
     }
 
@@ -104,9 +108,14 @@ class ButtonFragment : Fragment() {
                 INSTANCE = ButtonFragment()
             return INSTANCE!!
         }
+    }
 
-        fun newInstance(): ButtonFragment {
-            return ButtonFragment()
-        }
+    override fun show(items: ArrayList<Monster>) {
+        adapter!!.replaceAll(items)
+        recyclerView.smoothScrollToPosition(list.size-1)
+    }
+
+    override fun showError(error: Throwable) {
+        TODO("Not yet implemented")
     }
 }

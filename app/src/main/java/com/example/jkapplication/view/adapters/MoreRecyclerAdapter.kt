@@ -1,6 +1,5 @@
 package com.example.jkapplication.view.adapters
 
-import android.content.Context
 import android.net.Uri
 import android.os.Handler
 import android.util.Log
@@ -10,22 +9,21 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.view.fragments.MoreFragment
 import com.facebook.drawee.view.SimpleDraweeView
+import com.facebook.imagepipeline.common.ResizeOptions
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 
-class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, loadType: String) :
+class MoreRecyclerAdapter(list: java.util.ArrayList<Monster>, loadType: String) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), BaseAdapter {
-    private val TYPE_ITEM = 1
-    private val TYPE_FOOTER = 2
+    private val TYPE_ITEM = 0
+    private val TYPE_FOOTER = 1
     private val TYPE_LOADING = 0
 
-    val context = context
     val list = list
     var loadType = loadType
     lateinit var viewGroup: ViewGroup
@@ -64,13 +62,14 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
                 params.isFullSpan = true //  이거하면 얘만 너비꽉차게 보
 
                 if (MoreFragment.getInstance().checkLast()) {
-                    holder.more.visibility = View.INVISIBLE
-                    Toast.makeText(context, "List End", Toast.LENGTH_SHORT).show()
+                    holder.more.visibility = View.GONE
+                    //Toast.makeText(context, "List End", Toast.LENGTH_SHORT).show()
                 } else holder.more.visibility = View.VISIBLE
                 holder.more.setOnClickListener {
                     Log.d("btn", "clicked")
                     holder.more.visibility = View.INVISIBLE
                     holder.progress.visibility = View.VISIBLE
+                    MoreFragment.getInstance().swipeRefreshLayout.isEnabled = false
                     mainHandler.postDelayed({
                         holder.progress.visibility = View.GONE
                         MoreFragment.getInstance().onLoadMore()
@@ -124,6 +123,7 @@ class MoreRecyclerAdapter(context: Context, list: java.util.ArrayList<Monster>, 
     fun moreLoad(holder: MoreRecyclerAdapter.Holder, position: Int) {
         val imageRequest =
             ImageRequestBuilder.newBuilderWithSource(Uri.parse(list[position].img_url))
+                .setResizeOptions(ResizeOptions(300,300))
                 .build()
         holder.image.setImageRequest(imageRequest)
         holder.image.aspectRatio =

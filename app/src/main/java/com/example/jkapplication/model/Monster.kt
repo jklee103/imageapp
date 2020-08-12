@@ -36,4 +36,3 @@ fun getProgressItem(): Monster {
         1
     )
 }
-

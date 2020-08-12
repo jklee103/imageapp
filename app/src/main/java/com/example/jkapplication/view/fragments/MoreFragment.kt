@@ -6,26 +6,31 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.example.jkapplication.model.createContactsList
-import com.example.jkapplication.presenter.GlidePresenter
+import com.example.jkapplication.presenter.MorePresenter
+import com.example.jkapplication.view.BaseFragment
+import com.example.jkapplication.view.MainView
 import com.example.jkapplication.view.adapters.MoreRecyclerAdapter
+import com.example.jkapplication.view.decoration.ViewItemDecoration
 
 private const val LOAD_TYPE = "glide"
 
-class MoreFragment : Fragment() {
+class MoreFragment : BaseFragment(), MainView {
     lateinit var recyclerView: RecyclerView
     lateinit var list: ArrayList<Monster>
-    lateinit var adapter: MoreRecyclerAdapter
+    var adapter: MoreRecyclerAdapter ?= null
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    lateinit var presenter: GlidePresenter
     lateinit var hashmap: HashMap<String, Int>
-
+    override val presenter by lazy {
+        MorePresenter(this)
+    }
+    var replace: Boolean = true
     var count = 1//페이지
 
 
@@ -35,26 +40,21 @@ class MoreFragment : Fragment() {
     ): View? {
         var rootView = inflater.inflate(R.layout.fragment_more, container, false)
 
+        replace = true
         recyclerView = rootView.findViewById(R.id.f_more_rv_recyclerView)
         list = createContactsList(5)//demo list
         recyclerView.setHasFixedSize(true)
 
         var context: Context = this!!.activity!!
-        adapter = MoreRecyclerAdapter(context, list, LOAD_TYPE) //여기 나중에 어댑터 손보면서 바꿔주기
-
 
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-
-        recyclerView.adapter = adapter
-
-
-        presenter = GlidePresenter(adapter, list)//getlist
-
         setHashmap()
 
-        presenter.moreConnect(hashmap, true)
+        adapter = MoreRecyclerAdapter(arrayListOf(), LOAD_TYPE)
+        recyclerView.adapter = adapter
 
+        presenter.moreConnect(hashmap)
         swipeRefreshLayout =
             rootView.findViewById<SwipeRefreshLayout>(R.id.f_more_srl_refreshView)
 
@@ -64,14 +64,17 @@ class MoreFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recyclerView.addItemDecoration(ViewItemDecoration())
         swipeRefreshLayout.setOnRefreshListener { //새로고침시 리스트 받아옴
             count = 1
             setHashmap()
+            replace = true
             presenter.setIsLast(false)
-            presenter.moreConnect(hashmap, true)
+            presenter.moreConnect(hashmap)
             Log.d("refresh5", "replaced")
             swipeRefreshLayout.isRefreshing = false //true로 해놓으면 안 없어짐
         }
+
     }
 
     fun setHashmap() {
@@ -82,11 +85,13 @@ class MoreFragment : Fragment() {
     }
 
     fun onLoadMore() {
+        replace = false
         count++;
         hashmap = HashMap<String, Int>()
         hashmap.put("page", count)
         hashmap.put("perpage", 5)
-        presenter.moreConnect(hashmap, false)
+        presenter.moreConnect(hashmap)
+        swipeRefreshLayout.isEnabled = true
     }
 
     fun checkLast(): Boolean {
@@ -102,9 +107,19 @@ class MoreFragment : Fragment() {
                 INSTANCE = MoreFragment()
             return INSTANCE!!
         }
+    }
 
-        fun newInstance(): MoreFragment {
-            return MoreFragment()
+    override fun show(items: ArrayList<Monster>) {
+        if (replace||count==1) {
+            adapter!!.replaceAll(items)
+            recyclerView.smoothScrollToPosition(list.size-1)
+        } else {
+            adapter?.addAll(items)
+            //recyclerView.smoothScrollToPosition(list.size-1)
         }
+    }
+
+    override fun showError(error: Throwable) {
+        TODO("Not yet implemented")
     }
 }

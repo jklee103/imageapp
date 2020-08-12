@@ -38,5 +38,4 @@ class PagerAdapter : FragmentStateAdapter{
 
         }
     }
-
 }

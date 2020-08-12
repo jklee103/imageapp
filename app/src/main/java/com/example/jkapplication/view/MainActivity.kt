@@ -2,7 +2,11 @@ package com.example.jkapplication.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.view.MotionEvent
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.jkapplication.R
 import com.example.jkapplication.view.adapters.PagerAdapter
@@ -32,6 +36,9 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(tabLayout, viewPager){ tab, position ->
             tab.text = "#${(position + 1)}"
         }.attach()
+
+        viewPager.reduceDragSensitivity()
+
 
 //        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 //            override fun onTabReselected(tab: TabLayout.Tab?) {

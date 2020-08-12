@@ -1,8 +1,6 @@
 package com.example.jkapplication.view.adapters
 
-import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,16 +9,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jkapplication.R
 import com.example.jkapplication.model.Monster
 import com.facebook.drawee.view.SimpleDraweeView
+import com.facebook.imagepipeline.common.ResizeOptions
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 import java.util.*
 
 
-open class FrescoRecyclerAdapter(context: Context, list: ArrayList<Monster>, loadType: String) :
+open class FrescoRecyclerAdapter(list: ArrayList<Monster>, loadType: String) :
     RecyclerView.Adapter<FrescoRecyclerAdapter.Holder>(), BaseAdapter {
-    val context = context
+
     val list = list
     var loadType = loadType
-
+    var TYPE_ITEM = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.view_fresco, parent, false)
@@ -50,12 +49,16 @@ open class FrescoRecyclerAdapter(context: Context, list: ArrayList<Monster>, loa
     override fun frescoLoad(holder: Holder, position: Int) {
         val imageRequest =
             ImageRequestBuilder.newBuilderWithSource(Uri.parse(list[position].img_url))
-                //.setResizeOptions(ResizeOptions(300,300))
+                .setResizeOptions(ResizeOptions(300,300))
                 .build()
         holder.image.setImageRequest(imageRequest)
         holder.image.aspectRatio =
             (list[position].width.toFloat()) / (list[position].height.toFloat()) //비율 설정해줘야 높이 fit됨
 
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return TYPE_ITEM
     }
 
     override fun replaceAll(items: ArrayList<Monster>) {
